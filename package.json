@@ -2,7 +2,7 @@
   "name": "express-authorshaven",
   "version": "1.0.0",
   "description": "A Social platform for the creative at heart",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --require @babel/register ./test",
     "lint": "eslint '**/*js'",
@@ -51,7 +51,8 @@
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
     "prettier-eslint": "^8.8.2",
-    "prettier-eslint-cli": "^4.7.1"
+    "prettier-eslint-cli": "^4.7.1",
+    "sqlite3": "^4.0.8"
   },
   "lint-staged": {
     "*.js": [
@@ -62,6 +63,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
-    }
+    },
+    "homepage": "https://github.com/andela/king-kong-ah-backend#readme"
   }
 }

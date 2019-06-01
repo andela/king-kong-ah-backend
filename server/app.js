@@ -1,20 +1,12 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import env from 'dotenv';
-import router from './routes';
+import db from './models';
 
-env.config();
-const app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(router);
-
-app.get('*', (req, res) => res.status(200).send({
-  message: 'Welcome to authors haven',
-}));
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on ${port}`));
-
-export default app;
+/* eslint-disable no-console */
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection to DB has been established successfully.');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
+/* eslint-enable no-console */
