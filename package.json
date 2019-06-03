@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register ./test",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register ./server/test",
     "lint": "eslint '**/*js'",
     "lint:fix": "prettier-eslint --write '**/*js' ",
     "start-dev": "nodemon ./server/app.js --exec babel-node",
