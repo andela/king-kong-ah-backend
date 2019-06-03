@@ -1,0 +1,20 @@
+langauage: node
+
+node_js:
+  - node
+
+env:
+  - NODE_ENV=test
+
+services:
+  - sqlite3
+
+install:
+  - npm install
+
+script:
+  - npm test
+  
+notifications:
+  slack:
+    secure: gJ2lgaNtlgj2/+qQa+waA2WGuBz7VuvllWvUREyWGjiPSFf9TW+y4l06s/OLuaNj4vOu3mAh2DShZ6iAvg2zsArNfOk1apLlVAlNaS1aGxd83g6gOlu4jAMZ0YTGz/Tx8HsKlps68hZcfmlSf4fBX18BfwTuwH2q2tdQUwAvS3q2+NX1iaWKoFLxTi6N24x3EVU5L7Ub9LMfveVIhRp85hy8oVJ9ePULyaAMZ1yB+ByWXOaymiegp+ASL0Q7pVaHJ2I7F0z2jcu/lZNOdx1EqzxFhiYcDYh1yFQw4cQ4Mo2cjGfdSxE4CylIzVACnnidqYVbBsYr1oIUNbw0I5uPj1rZdEzgtXn0myPd3hYvwGqpZ55fs24f2EiFBpVcpUjI4Sfxez+4US+tP45Dlq+ua7UI5Pc6U0d684C9MVU5V3tmMOkkt7ukD5enY28+tjAQ/3dX5qEEpE2ddJ5xmzzsIcsfKiAOY5p4wbkh72jf08kOTlauduOK+grezJ4QIQ2yXIgmMTrsxad7uKmGA8/jrHJ9K5O3M9BIZYoMXA75rzAs8st5YGXfJ7X0Y79qFAZn/5cgDjoOXtcrE/1fBqEZYXR33YpXUwi50fU7DhtH3pjscOX/rqcxFuytzGFekqKemV5ptahNRtShyMWJl7BjsgI507PsSU88mUG31H1NVEM=
