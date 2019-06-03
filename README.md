@@ -1,10 +1,7 @@
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com) ![Build Status](https://travis-ci.com/andela/king-kong-ah-backend.svg?branch=develop) ![Coverage Status](https://coveralls.io/repos/github/andela/king-kong-ah-backend/badge.svg?branch=develop)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
-[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
-
-## Build Status
-
-![Build Status](https://travis-ci.com/andela/king-kong-ah-backend.svg?branch=develop)
 
 ## Vision
 Create a community of like minded authors to foster inspiration and innovation
