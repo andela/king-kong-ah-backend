@@ -8,7 +8,7 @@ const { expect } = chai;
 describe('Default test', () => {
   context('Basic test', () => {
     it('Should call expect from chai', () => {
-        expect(2).to.equal(2);
+      expect(2).to.equal(2);
     });
   });
 });
