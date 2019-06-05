@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import './controller/user.spec';
 
 chai.use(chaiHttp);
 
