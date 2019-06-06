@@ -89,8 +89,13 @@ const user = (sequelize, DataTypes) => {
     newUser.password = hashPassword(newUser.password);
   });
 
-  User.associate = () => {
-    // associations can be defined here
+  User.associate = (models) => {
+    // associations between user and article
+    User.hasMany(models.Article, {
+      foreignKey: 'userId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
   };
 
   return User;

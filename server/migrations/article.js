@@ -27,7 +27,12 @@ const Articles = {
     },
     userId: {
       type: Sequelize.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'userId'
+      }
     },
     isBlacklisted: {
       type: Sequelize.BOOLEAN,
@@ -35,7 +40,7 @@ const Articles = {
     },
     categoryId: {
       type: Sequelize.UUID,
-      allowNull: false
+      allowNull: false,
     },
     isPublished: {
       type: Sequelize.BOOLEAN,

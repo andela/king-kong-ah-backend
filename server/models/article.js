@@ -68,8 +68,14 @@ const article = (sequelize, DataTypes) => {
     newArticle.setDataValue('slug', createUniqueSlug(newArticle.title));
     newArticle.setDataValue('description', createEllipsis(newArticle.body));
   });
-  Article.associate = () => {
+  Article.associate = (models) => {
     // associations can be defined here
+    Article.belongsTo(models.User, {
+      foreignKey: 'userId',
+      target: 'id',
+      as: 'user',
+      onDelete: 'CASCADE'
+    });
   };
   return Article;
 };
