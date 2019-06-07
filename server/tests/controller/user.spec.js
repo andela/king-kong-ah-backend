@@ -13,7 +13,7 @@ describe('User signup', () => {
       .post('/api/v1/auth/signup')
       .send({
         email: 'testing@authorshaven.com',
-        username: 'test',
+        username: 'testing',
         lastName: 'test',
         firstName: 'test',
         password: 'testing'

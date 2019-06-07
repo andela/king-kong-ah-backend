@@ -1,10 +1,14 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '<server>/app';
-import { case1, case2, case3 } from '<fixtures>/userValidationData';
+import {
+  emptyRequest,
+  invalidEmail,
+  invalidPassword,
+  invalidUsername
+} from '<fixtures>/userValidationData';
 
 chai.use(chaiHttp);
-
 const { expect } = chai;
 
 describe('User signup validations', () => {
@@ -12,7 +16,7 @@ describe('User signup validations', () => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(case1)
+      .send(emptyRequest)
       .end((err, res) => {
         expect(res.status && res.body.status).to.be.equal(400);
         expect(res).to.be.an('object');
@@ -30,19 +34,29 @@ describe('User signup validations', () => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(case2)
+      .send(invalidEmail)
       .end((err, res) => {
         expect(res.body.error.email).to.be.an('array').that.does.include('The email format is invalid.');
         done();
       });
   });
-  it('should return 400 if password less than 6 characters', (done) => {
+  it('should return 400 if password is less than 6 characters', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(case3)
+      .send(invalidPassword)
       .end((err, res) => {
         expect(res.body.error.password).to.be.an('array').that.does.include('The password must be at least 6 characters.');
+        done();
+      });
+  });
+  it('should return 400 if username is less than 6 characters', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/auth/signup')
+      .send(invalidUsername)
+      .end((err, res) => {
+        expect(res.body.error.username).to.be.an('array').that.does.include('The username must be at least 6 characters.');
         done();
       });
   });

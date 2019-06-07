@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { readdirSync } from 'fs';
 import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
@@ -30,6 +31,13 @@ Object.keys(db).forEach((modelName) => {
 });
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection to DB has been established successfully.');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 export default db;

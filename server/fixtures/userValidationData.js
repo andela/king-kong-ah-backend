@@ -1,20 +1,28 @@
 /** Test cases for user validation */
 
 /** Empty request body */
-export const case1 = {};
+export const emptyRequest = {};
 /** Invalid email */
-export const case2 = {
+export const invalidEmail = {
   email: 'akinye',
   username: 'test',
   lastName: 'test',
   firstName: 'test',
   password: 'test'
 };
-/** Invalid email */
-export const case3 = {
+/** Invalid password */
+export const invalidPassword = {
+  email: 'akinye@gmail.com',
+  username: 'test12',
+  lastName: 'test',
+  firstName: 'test',
+  password: 'test'
+};
+/** Invalid username */
+export const invalidUsername = {
   email: 'akinye@gmail.com',
   username: 'test',
   lastName: 'test',
   firstName: 'test',
-  password: 'test'
+  password: 'test12'
 };

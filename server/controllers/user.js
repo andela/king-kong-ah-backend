@@ -1,6 +1,7 @@
 import uuid from 'uuid';
+import { cookieGenerator } from '<helpers>/utils';
 import data from '../dummyData/data.json';
-import tokenHelper from './helperFunctions/tokenHelper';
+
 
 /**
  * Class userController contains all methods pertaining to users
@@ -28,15 +29,7 @@ class userController {
       firstName: req.body.firstName.toLowerCase().trim(),
       password: req.body.password
     };
-    res.cookie(
-      'access_token',
-      { token: tokenHelper.tokenGenerator(newUser.id) },
-      {
-        maxAge: 3600,
-        httpOnly: true,
-        secure: true
-      }
-    );
+    cookieGenerator(newUser.id, res);
     data.push(newUser);
     return res.status(201).send({
       status: 201,

@@ -1,9 +1,9 @@
 import express from 'express';
-import userController from '<controllers>/userController';
-import { validateSignUp } from '<middlewares>';
+import userController from '<controllers>/user';
+import { validateUserSignUp } from '<middlewares>/authValidation';
 
 const user = express.Router();
 
-user.post('/signup', validateSignUp, userController.signUp);
+user.post('/signup', validateUserSignUp, userController.signUp);
 
 export default user;

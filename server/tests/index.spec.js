@@ -1,16 +1,3 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
 import './controller/userValidation.spec';
 import './controller/user.spec';
-
-chai.use(chaiHttp);
-
-const { expect } = chai;
-
-describe('Default test', () => {
-  context('Basic test', () => {
-    it('Should call expect from chai', () => {
-      expect(2).to.equal(2);
-    });
-  });
-});
+import './models/article.spec';

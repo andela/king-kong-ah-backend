@@ -10,13 +10,23 @@ import validate from './validate';
    */
 
 export const validateUserSignUp = (req, res, next) => {
-  const data = req.body;
+  const {
+    username, firstName, lastName, email, password
+  } = req.body;
+  const data = {
+    firstName: firstName && typeof firstName === 'string' ? firstName.trim() : firstName,
+    lastName: lastName && typeof lastName === 'string' ? lastName.trim() : lastName,
+    email,
+    username: username && typeof username === 'string' ? username.trim() : username,
+    password: password && password.trim()
+  };
+
   const signUpRules = {
     email: 'required|email',
-    username: 'required|string|alpha',
-    firstName: 'required|string|alpha',
-    lastName: 'required|string|alpha',
-    password: 'required|string|min:6',
+    username: 'required|string|alpha|min:6',
+    firstName: 'required|string|alpha|min:2',
+    lastName: 'required|string|alpha|min:2',
+    password: 'required|min:6',
   };
   validate(data, signUpRules, res, next);
 };
