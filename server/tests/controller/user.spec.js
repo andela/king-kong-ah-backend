@@ -1,11 +1,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../../server';
+import app from '../../app';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
-// const token;
 
 describe('User signup', () => {
   it('should create a new user and save a token in the cookie', (done) => {

@@ -1,3 +1,20 @@
 {
-    "presets" : ["@babel/preset-env"]
-}
+    "presets" : ["@babel/preset-env"],
+    "plugins": [
+        [
+          "module-resolver",
+          {
+            "root": ["./server"],
+            "alias": {
+              "<test>": "./server/tests",
+              "<fixtures>": "./server/fixtures",
+              "<controllers>": "./server/controllers",
+              "<helpers>": "./server/helpers",
+              "<validations>": "./server/validations",
+              "<server>": "./server",
+              "<middlewares>":"./server/middlewares"
+            }
+          }
+        ]
+      ]
+    }
