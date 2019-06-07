@@ -4,5 +4,21 @@
     "test": {
       "plugins": ["@babel/plugin-transform-runtime"]
     }
-  }
+  },
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "root": ["./server"],
+        "alias": {
+          "<test>": "./server/tests",
+          "<fixtures>": "./server/fixtures",
+          "<controllers>": "./server/controllers",
+          "<helpers>": "./server/helpers",
+          "<middlewares>": "./server/middlewares",
+          "<server>": "./server"
+        }
+      }
+    ]
+  ]
 }
