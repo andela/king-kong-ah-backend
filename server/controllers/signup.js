@@ -1,22 +1,32 @@
-import uuid from 'uuid';
-import data from '<fixtures>/data';
 import { cookieGenerator } from '<helpers>/utils';
+import model from '../models';
 
-export const signUp = (req, res) => {
-  const { formattedValues } = req;
-  const newUser = {
-    id: uuid.v4(),
-    email: formattedValues.email,
-    username: formattedValues.username,
-    lastName: formattedValues.lastName,
-    firstName: formattedValues.firstName,
+const { User } = model;
+
+const signUp = async (req, res) => {
+  const {
+    formattedValues: {
+      email, username, firstName, lastName
+    }
+  } = req;
+
+  const userData = {
+    email,
+    username,
+    lastName,
+    firstName,
     password: req.body.password
   };
-  cookieGenerator(newUser.id, res);
-  data.push(newUser);
+  const newUser = await User.create(userData);
+
+  cookieGenerator(userData.id, process.env.COOKIE_EXPIRY_DATE, res);
+
+  const { password, ...userInfo } = newUser.dataValues;
+
   return res.status(201).send({
-    status: 201,
-    message: 'User created successfully'
+    status: 'success',
+    message: 'User created successfully',
+    data: userInfo
   });
 };
 

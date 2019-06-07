@@ -2,9 +2,7 @@
 import chai from 'chai';
 
 import chaiHttp from 'chai-http';
-import utils from '../../helpers/utils';
-
-const { hashPassword } = utils;
+import { hashPassword, tokenGenerator } from '<helpers>/utils';
 
 chai.use(chaiHttp);
 
@@ -21,5 +19,16 @@ describe('Helpers - Utils', () => {
         console.log(error);
       }
     });
+  });
+});
+
+describe('Token Generator', () => {
+  it('should generate token with default values', () => {
+    try {
+      const token = tokenGenerator('5c1d4726-647e-4f77-a251-10381d3510f3');
+      expect(token).to.be.a('string');
+    } catch (error) {
+      console.log(error);
+    }
   });
 });

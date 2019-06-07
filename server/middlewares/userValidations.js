@@ -6,11 +6,11 @@ const signupValidations = (request, response, next) => {
   } = request.body;
 
   const data = {
-    firstName: firstName && typeof firstName === 'string' ? firstName.trim() : firstName,
-    lastName: lastName && typeof lastName === 'string' ? lastName.trim() : lastName,
+    firstName,
+    lastName,
     email,
-    username: username && typeof username === 'string' ? username.trim() : username,
-    password: password && password.trim()
+    username,
+    password
   };
 
   const rules = {

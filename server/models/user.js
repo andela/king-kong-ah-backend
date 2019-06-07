@@ -1,6 +1,5 @@
-import utils from '../helpers/utils';
+import { hashPassword } from '<helpers>/utils';
 
-const { hashPassword } = utils;
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',

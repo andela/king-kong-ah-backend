@@ -16,7 +16,8 @@
           "<controllers>": "./server/controllers",
           "<helpers>": "./server/helpers",
           "<middlewares>": "./server/middlewares",
-          "<server>": "./server"
+          "<server>": "./server",
+          "<serverModels>": "./server/models"
         }
       }
     ]

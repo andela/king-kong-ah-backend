@@ -2,11 +2,10 @@
 import chai from 'chai';
 
 import chaiHttp from 'chai-http';
-import models from '../../models';
-import newUser from '../../fixtures/user';
+import models from '<serverModels>';
+import { newUser } from '<fixtures>/user';
 
 chai.use(chaiHttp);
-
 const { expect } = chai;
 const { User, sequelize } = models;
 
@@ -177,7 +176,10 @@ const modelTest = describe('Model - User', () => {
 
     it('should not allow invalid profile image', async () => {
       const newUser1 = {
-        ...newUser, email: 'enya@gmail.com', username: 'enya', profileImage: 'http:/google.com'
+        ...newUser,
+        email: 'enya@gmail.com',
+        username: 'enya',
+        profileImage: 'http:/google.com'
       };
       try {
         const user = await User.create(newUser1);

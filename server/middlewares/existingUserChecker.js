@@ -1,11 +1,19 @@
-import data from '<fixtures>/data';
+import model from '../models';
 import { toLowerCaseAndTrim } from '<helpers>/utils';
 
-const userCheck = (req, res, next) => {
+const { User } = model;
+
+const validUserCheck = async (req, res, next) => {
+  const { email, username } = req.body;
+
   const formattedValues = toLowerCaseAndTrim(req.body);
-  const userEmailExist = data.find(userEmail => userEmail.email === formattedValues.email);
-  const userNameExist = data.find(userName => userName.username === formattedValues.username);
+
+  const userEmailExist = await User.findOne({ where: { email } });
+
+  const userNameExist = await User.findOne({ where: { username } });
+
   let message;
+
   if (userEmailExist && userNameExist) {
     message = 'Email and username exist';
   } else if (userEmailExist) {
@@ -22,4 +30,4 @@ const userCheck = (req, res, next) => {
   req.formattedValues = formattedValues;
   next();
 };
-export default userCheck;
+export default validUserCheck;

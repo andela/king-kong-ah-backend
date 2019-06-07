@@ -1,14 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '<server>/app';
-import {
-  goodUserData,
-  badUserData,
-  emptyUserData,
-  repeatedEmail,
-  repeatedEmailAndUsername,
-  repeatedUsername
-} from '<fixtures>/user';
+import { goodUserData, emptyUserData, getUserData } from '<fixtures>/user';
 
 chai.use(chaiHttp);
 
@@ -24,16 +17,18 @@ describe('User signup', () => {
         done();
       });
   });
+
   it('should not allow invalid data types', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(badUserData)
+      .send(getUserData({ firstName: 666, lastName: 666, username: 99999 }))
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
         done();
       });
   });
+
   it('should create a new user and save a token in the cookie', (done) => {
     chai
       .request(app)
@@ -49,31 +44,35 @@ describe('User signup', () => {
         done();
       });
   });
+
   it('should not allow duplicate email and username', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(repeatedEmailAndUsername)
+      .send(getUserData({ email: 'testing@authorshaven.com', username: 'testing' }))
       .end((err, res) => {
         expect(res.status).to.be.equal(409);
         done();
       });
   });
+
   it('should not allow duplicate email', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(repeatedEmail)
+      .send(getUserData({ email: 'testing@authorshaven.com', username: 'simi' }))
       .end((err, res) => {
         expect(res.status).to.be.equal(409);
+        expect(res.body.message).to.equal('Email exist');
         done();
       });
   });
+
   it('should not allow duplicate username', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(repeatedUsername)
+      .send(getUserData({ email: 'testero@authorshaven.com', username: 'testing' }))
       .end((err, res) => {
         expect(res.status).to.be.equal(409);
         done();
