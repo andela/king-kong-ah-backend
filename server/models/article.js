@@ -1,4 +1,4 @@
-import { createUniqueSlug, createEllipsis } from '../helpers/utils';
+import { createUniqueSlug, createEllipsis } from '<helpers>/utils';
 
 const article = (sequelize, DataTypes) => {
   const Article = sequelize.define(

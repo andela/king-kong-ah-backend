@@ -1,12 +1,8 @@
 /* eslint-disable no-console */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-<<<<<<< HEAD
-import { hashPassword, tokenGenerator } from '<helpers>/utils';
-=======
 import { hashPassword, tokenGenerator, createEllipsis } from '<helpers>/utils';
-import { newArticle } from '../../fixtures/article';
->>>>>>> #166272099 user signup (#10)
+import { newArticle } from '<fixtures>/article';
 
 chai.use(chaiHttp);
 const { expect } = chai;

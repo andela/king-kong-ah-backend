@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import chai from 'chai';
 import chaiAsPromise from 'chai-as-promised';
-import models from '../../models';
-import { createEllipsis } from '../../helpers/utils';
-import { newArticle } from '../../fixtures/article';
-
+import models from '<serverModels>';
+import { createEllipsis } from '<helpers>/utils';
+import { newArticle } from '<fixtures>/article';
 
 chai.use(chaiAsPromise);
 const { expect } = chai;
