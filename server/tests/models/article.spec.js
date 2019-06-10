@@ -2,7 +2,9 @@
 import chai from 'chai';
 import chaiAsPromise from 'chai-as-promised';
 import models from '../../models';
+import { createEllipsis } from '../../helpers/utils';
 import { newArticle } from '../../fixtures/article';
+
 
 chai.use(chaiAsPromise);
 const { expect } = chai;
@@ -26,14 +28,15 @@ describe('Article Model', async () => {
     }
 
     const {
-      title, description, userId, isBlacklisted, categoryId, isPublished
+      title, body, description, userId, isBlacklisted, categoryId, isPublished
     } = article;
     expect(newArticle.title).to.be.equal(title);
-    expect(newArticle.description).to.be.equal(description);
+    expect(newArticle.body).to.be.equal(body);
     expect(newArticle.userId).to.be.equal(userId);
     expect(newArticle.isBlacklisted).to.be.equal(isBlacklisted);
     expect(newArticle.categoryId).to.be.equal(categoryId);
     expect(newArticle.isPublished).to.be.equal(isPublished);
+    expect(description).to.be.equal(createEllipsis(body));
   });
 
   it('should delete an article', async () => {

@@ -1,6 +1,5 @@
-import utils from '../helpers/utils';
+import { createUniqueSlug, createEllipsis } from '../helpers/utils';
 
-const { createUniqueSlug } = utils;
 const article = (sequelize, DataTypes) => {
   const Article = sequelize.define(
     'Article',
@@ -23,6 +22,12 @@ const article = (sequelize, DataTypes) => {
       },
       slug: {
         type: DataTypes.STRING,
+        validate: {
+          notEmpty: true
+        }
+      },
+      description: {
+        type: DataTypes.TEXT,
         validate: {
           notEmpty: true
         }
@@ -61,6 +66,7 @@ const article = (sequelize, DataTypes) => {
   );
   Article.beforeCreate((newArticle) => {
     newArticle.setDataValue('slug', createUniqueSlug(newArticle.title));
+    newArticle.setDataValue('description', createEllipsis(newArticle.body));
   });
   Article.associate = () => {
     // associations can be defined here
