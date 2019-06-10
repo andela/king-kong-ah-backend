@@ -18,17 +18,6 @@ describe('User signup', () => {
       });
   });
 
-  it('should not allow invalid data types', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/auth/signup')
-      .send(getUserData({ firstName: 666, lastName: 666, username: 99999 }))
-      .end((err, res) => {
-        expect(res.status).to.be.equal(400);
-        done();
-      });
-  });
-
   it('should create a new user and save a token in the cookie', (done) => {
     chai
       .request(app)
@@ -60,7 +49,7 @@ describe('User signup', () => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(getUserData({ email: 'testing@authorshaven.com', username: 'simi' }))
+      .send(getUserData({ email: 'testing@authorshaven.com', username: 'mosimi' }))
       .end((err, res) => {
         expect(res.status).to.be.equal(409);
         expect(res.body.message).to.equal('Email exist');

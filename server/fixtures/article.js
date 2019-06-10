@@ -2,11 +2,11 @@ import { createUniqueSlug } from '<helpers>/utils';
 
 const slugTitle = createUniqueSlug('hello world');
 
+const largeText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
 export const newArticle = {
   title: 'Hello world!',
-  body: `So how did the classical Latin become so incoherent? According to McClintock, a 15th century typesetter likely scrambled part of Cicero's De Finibus in order to provide placeholder text to mockup various fonts for a type specimen book.
-
-  It's difficult to find examples of lorem ipsum in use before Letraset made it popular as a dummy text in the 1960s, although McClintock says he remembers coming across the lorem ipsum passage in a book of old metal type samples.`,
+  body: largeText,
   userId: 'a5b37ee6-1553-4681-a343-d8296344e129',
   isBlacklisted: false,
   slug: slugTitle,
@@ -14,4 +14,20 @@ export const newArticle = {
   isPublished: true
 };
 
-export default { newArticle };
+
+export const emptyArticleData = {};
+
+export const invalidTitle = largeText;
+
+export const invalidCategoryId = 'hdkdksks';
+
+export const goodArticleData = {
+  title: 'Generated Text',
+  body: largeText,
+  categoryId: 'bd74c8da-4d9e-11e7-b114-b2f933d5fe66'
+};
+
+export const getArticleData = args => ({
+  ...goodArticleData,
+  ...args
+});

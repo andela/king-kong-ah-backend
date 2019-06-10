@@ -1,6 +1,7 @@
 import slug from 'slug';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import Validator from 'validatorjs';
 
 /**
  * @param {string} password
@@ -66,4 +67,52 @@ export const createEllipsis = (text, length = 200) => {
     return text;
   }
   return `${text.slice(0, length - 3).trim()}...`;
+};
+
+/**
+   * check Validation function
+   * @param {Object} data - data to be validated
+   * @param {Object} rules - rules for validation
+   * @returns {Boolean} true - if validation passes
+   * @returns {Object} error Object - if validation falis
+   */
+export const checkValidation = (data, rules) => {
+  const validation = new Validator(data, rules);
+  if (validation.passes()) {
+    return true;
+  }
+  return {
+    error: {
+      status: 400,
+      message: validation.errors.all()
+    }
+  };
+};
+
+/**
+     * Display error
+     * @param {Object} err
+     * @param {Object} res
+     * @returns {Object} response body - statusCode and errorMessage
+     */
+export const displayError = (err, res) => {
+  const status = 400;
+  res.status(status).json({
+    status,
+    error: err.message,
+  });
+};
+
+/**
+   * validate endpoint
+   * @param {Object} data - data to be validated
+   * @param {Object} rules - rules for validation
+   * @param {Object} response - response body
+   * @param {Object} nextFunction - call next function middleware
+   * @returns {Boolean} true - if validation passes
+   * @returns {Object} error Object - if validation fails
+   */
+export const validate = (data, rules, response, nextFunction) => {
+  const check = checkValidation(data, rules);
+  return check === true ? nextFunction() : displayError(check.error, response);
 };
