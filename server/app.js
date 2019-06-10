@@ -1,12 +1,18 @@
-import db from './models';
+import express from 'express';
+import bodyParser from 'body-parser';
+import env from 'dotenv';
+import router from './routes';
 
-/* eslint-disable no-console */
-db.sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection to DB has been established successfully.');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err);
-  });
-/* eslint-enable no-console */
+env.config();
+
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(router);
+
+const port = process.env.PORT || 3000;
+app.listen(port);
+
+export default app;
