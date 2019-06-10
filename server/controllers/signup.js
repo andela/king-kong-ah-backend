@@ -19,7 +19,7 @@ const signUp = async (req, res) => {
   };
   const newUser = await User.create(userData);
 
-  cookieGenerator(userData.id, process.env.COOKIE_EXPIRY_DATE, res);
+  cookieGenerator(newUser.id, process.env.COOKIE_EXPIRY_DATE, res);
 
   const { password, ...userInfo } = newUser.dataValues;
 

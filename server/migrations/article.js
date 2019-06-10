@@ -14,6 +14,13 @@ const Articles = {
       type: Sequelize.STRING,
       allowNull: false
     },
+    description: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     body: {
       type: Sequelize.TEXT,
       allowNull: false

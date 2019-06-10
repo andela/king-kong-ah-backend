@@ -55,4 +55,15 @@ export const cookieGenerator = (id, cookieExpiryDate, res) => res.cookie(
     secure: true
   }
 );
-export default { hashPassword, createUniqueSlug };
+
+/**
+ * @param {string} text
+ * @param {integer} length
+ * @return {string} text
+ */
+export const createEllipsis = (text, length = 200) => {
+  if (length > text.length) {
+    return text;
+  }
+  return `${text.slice(0, length - 3).trim()}...`;
+};
