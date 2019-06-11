@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
 import chai from 'chai';
-
 import chaiHttp from 'chai-http';
-import { hashPassword, tokenGenerator } from '<helpers>/utils';
+import { hashPassword, tokenGenerator, createEllipsis } from '<helpers>/utils';
+import { newArticle } from '<fixtures>/article';
 
 chai.use(chaiHttp);
-
 const { expect } = chai;
 
 describe('Helpers - Utils', () => {
@@ -18,6 +17,22 @@ describe('Helpers - Utils', () => {
       } catch (error) {
         console.log(error);
       }
+    });
+  });
+
+  describe('CreateEllipsis function', () => {
+    const text = 'This is just a dummy text';
+
+    it('should return ellipsis text', () => {
+      expect(createEllipsis(newArticle.body)).to.not.equal(newArticle.body);
+    });
+
+    it('should return original text', () => {
+      expect(createEllipsis(text, 10)).to.not.equal(text);
+    });
+
+    it('should return original text', () => {
+      expect(createEllipsis(text)).to.equal(text);
     });
   });
 });

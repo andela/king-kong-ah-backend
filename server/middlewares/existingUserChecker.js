@@ -1,5 +1,5 @@
-import model from '../models';
 import { toLowerCaseAndTrim } from '<helpers>/utils';
+import model from '<serverModels>';
 
 const { User } = model;
 
