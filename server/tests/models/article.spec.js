@@ -16,7 +16,8 @@ before(async () => {
   try {
     await sequelize.sync({ force: true });
     const user = await User.create(getUserData({
-      email: 'johnndoe@email.com', username: 'johnndoee'
+      email: 'johnndoe@email.com',
+      username: 'johnndoee'
     }));
     newArticle.userId = user.id;
   } catch (error) {

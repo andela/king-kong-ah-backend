@@ -72,12 +72,12 @@ export const createEllipsis = (text, length = 200) => {
 };
 
 /**
-   * check Validation function
-   * @param {Object} data - data to be validated
-   * @param {Object} rules - rules for validation
-   * @returns {Boolean} true - if validation passes
-   * @returns {Object} error Object - if validation falis
-   */
+ * check Validation function
+ * @param {Object} data - data to be validated
+ * @param {Object} rules - rules for validation
+ * @returns {Boolean} true - if validation passes
+ * @returns {Object} error Object - if validation falis
+ */
 export const checkValidation = (data, rules) => {
   const validation = new Validator(data, rules);
   if (validation.passes()) {
@@ -92,38 +92,53 @@ export const checkValidation = (data, rules) => {
 };
 
 /**
-     * Display error
-     * @param {Object} err
-     * @param {Object} res
-     * @returns {Object} response body - statusCode and errorMessage
-     */
-export const displayError = (err, res) => {
-  const status = 400;
+ * Display error
+ * @param {Object} err
+ * @param {Object} res
+ * @param {number} status
+ * @returns {Object} response body - statusCode and errorMessage
+ */
+export const displayError = (err, res, status = 400) => {
   res.status(status).json({
     status,
-    error: err.message,
+    message: err.message
   });
 };
 
 /**
-   * validate endpoint
-   * @param {Object} data - data to be validated
-   * @param {Object} rules - rules for validation
-   * @param {Object} response - response body
-   * @param {Object} nextFunction - call next function middleware
-   * @returns {Boolean} true - if validation passes
-   * @returns {Object} error Object - if validation fails
-   */
+ * validate endpoint
+ * @param {Object} data - data to be validated
+ * @param {Object} rules - rules for validation
+ * @param {Object} response - response body
+ * @param {Object} nextFunction - call next function middleware
+ * @returns {Boolean} true - if validation passes
+ * @returns {Object} error Object - if validation fails
+ */
 export const validate = (data, rules, response, nextFunction) => {
   const check = checkValidation(data, rules);
   return check === true ? nextFunction() : displayError(check.error, response);
 };
 /**
- * @param {string} hashedPassword
+ * @param {string} hashPwd
  * @param {string} password
  * @return {string} hash
  */
-export const comparePassword = (hashedPassword, password) => bcrypt.compareSync(
-  password,
-  hashedPassword
-);
+export const comparePassword = (hashPwd, password) => bcrypt.compareSync(password, hashPwd);
+
+/**
+ * @param {object} req
+ * @return {string} fullUrl
+ */
+export const getFullUrl = req => `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+/**
+ * @param {string} fullUrl
+ * @return {string} baseUrl
+ */
+export const getBaseUrl = fullUrl => fullUrl.slice(0, fullUrl.lastIndexOf('/'));
+
+/**
+ * @param {string} token
+ * @return {object} decodeToken
+ */
+export const decodeToken = token => jwt.verify(token, process.env.SECRET);

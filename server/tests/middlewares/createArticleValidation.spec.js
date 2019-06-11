@@ -10,7 +10,6 @@ import {
   invalidCategoryId
 } from '<fixtures>/article';
 
-
 chai.use(chaiHttp);
 chai.use(chaiUUID);
 const { expect } = chai;
@@ -24,18 +23,22 @@ describe('Article creation validation', () => {
       .end((err, res) => {
         expect(res.status && res.body.status).to.be.equal(400);
         expect(res).to.be.an('object');
-        expect(res.body)
-          .to.have.property('error');
-        expect(res.body.error.title).to.be.an('array').that.does.include('The title field is required.');
-        expect(res.body.error.body).to.be.an('array').that.does.include('The body field is required.');
-        expect(res.body.error.categoryId).to.be.an('array').that.does.include('The categoryId field is required.');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message.title)
+          .to.be.an('array')
+          .that.does.include('The title field is required.');
+        expect(res.body.message.body)
+          .to.be.an('array')
+          .that.does.include('The body field is required.');
+        expect(res.body.message.categoryId)
+          .to.be.an('array')
+          .that.does.include('The categoryId field is required.');
         done();
       });
   });
 
   it('should return true if categoryId is a valid UUID', () => {
-    chai
-      .expect(goodArticleData.categoryId).to.be.a.uuid();
+    chai.expect(goodArticleData.categoryId).to.be.a.uuid();
   });
 
   it('should return 400 if categoryId is not UUID', (done) => {
@@ -46,9 +49,10 @@ describe('Article creation validation', () => {
       .end((err, res) => {
         expect(res.status && res.body.status).to.be.equal(400);
         expect(res).to.be.an('object');
-        expect(res.body)
-          .to.have.property('error');
-        expect(res.body.error.categoryId).to.be.an('array').that.does.include('The categoryId format is invalid.');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message.categoryId)
+          .to.be.an('array')
+          .that.does.include('The categoryId format is invalid.');
         done();
       });
   });
@@ -61,9 +65,10 @@ describe('Article creation validation', () => {
       .end((err, res) => {
         expect(res.status && res.body.status).to.be.equal(400);
         expect(res).to.be.an('object');
-        expect(res.body)
-          .to.have.property('error');
-        expect(res.body.error.title).to.be.an('array').that.does.include('The title may not be greater than 100 characters.');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message.title)
+          .to.be.an('array')
+          .that.does.include('The title may not be greater than 100 characters.');
         done();
       });
   });

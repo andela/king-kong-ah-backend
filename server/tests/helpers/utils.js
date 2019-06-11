@@ -19,5 +19,4 @@ const signupUser = agent => new Promise((resolve) => {
     });
 });
 
-
 export default signupUser;

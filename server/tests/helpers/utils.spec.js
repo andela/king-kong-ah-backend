@@ -3,13 +3,11 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { newArticle } from '<fixtures>/article';
 import {
-  hashPassword,
-  tokenGenerator,
-  createEllipsis,
-  cookieGenerator
+  hashPassword, tokenGenerator, createEllipsis, cookieGenerator
 } from '<helpers>/utils';
 
 chai.use(chaiHttp);
+
 const { expect } = chai;
 
 describe('Helpers - Utils', () => {

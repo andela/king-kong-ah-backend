@@ -80,7 +80,7 @@ const user = (sequelize, DataTypes) => {
       isVerified: {
         type: DataTypes.BOOLEAN,
         default: false
-      },
+      }
     },
     {}
   );

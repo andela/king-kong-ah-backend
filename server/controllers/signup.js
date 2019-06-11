@@ -1,5 +1,7 @@
-import { cookieGenerator } from '<helpers>/utils';
 import model from '<serverModels>';
+import { cookieGenerator } from '<helpers>/utils';
+import generateEmail from '<emails>/verification';
+import sendMail from '<helpers>/emails';
 
 const { User } = model;
 
@@ -23,8 +25,16 @@ const signUp = async (req, res) => {
     const newUser = await User.create(userData);
 
     cookieGenerator(newUser.id, newUser.isVerified, process.env.COOKIE_EXPIRY_DATE, res);
-
     const { password, ...userInfo } = newUser.dataValues;
+    const verificationEmail = generateEmail(newUser, req);
+
+    await sendMail(
+      process.env.SENDGRID_API_KEY,
+      newUser.email,
+      process.env.SENDGRID_FROM,
+      'Email Verification',
+      verificationEmail
+    );
 
     return res.status(201).send({
       status: 'success',
