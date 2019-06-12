@@ -76,7 +76,11 @@ const user = (sequelize, DataTypes) => {
       isAdmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-      }
+      },
+      isVerified: {
+        type: DataTypes.BOOLEAN,
+        default: false
+      },
     },
     {}
   );

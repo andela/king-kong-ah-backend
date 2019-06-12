@@ -1,5 +1,5 @@
 import { cookieGenerator } from '<helpers>/utils';
-import model from '../models';
+import model from '<serverModels>';
 
 const { User } = model;
 
@@ -15,11 +15,12 @@ const signUp = async (req, res) => {
     username,
     lastName,
     firstName,
+    isVerified: false,
     password: req.body.password
   };
   const newUser = await User.create(userData);
 
-  cookieGenerator(newUser.id, process.env.COOKIE_EXPIRY_DATE, res);
+  cookieGenerator(newUser.id, newUser.isVerified, process.env.COOKIE_EXPIRY_DATE, res);
 
   const { password, ...userInfo } = newUser.dataValues;
 

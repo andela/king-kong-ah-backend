@@ -24,7 +24,7 @@
           "<middlewares>": "./server/middlewares",
           "<server>": "./server",
           "<serverModels>": "./server/models",
-          "<validations>":"./server/middlewares/validations"
+          "<validations>":"./server/middlewares/validations",
         }
       }
     ]
