@@ -4,19 +4,28 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register ./server/tests/index.spec.js --exit",
+    "build-server": "babel server --out-dir dist",
+    "build": "npm run clean && npm run build-server",
+    "clean": "rm -rf dist && mkdir dist",
+    "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --exit",
     "lint": "eslint '**/*js'",
     "lint:fix": "prettier-eslint --write '**/*js' ",
+    "migration": "npx sequelize-cli db:migrate",
     "start-dev": "nodemon ./server/app.js --exec babel-node",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "start": "node dist/app.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "heroku-postbuild": "npm run build && npx run migration"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@babel/cli": "^7.1.5",
     "@babel/core": "^7.4.5",
     "@babel/node": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
+    "babel-plugin-module-resolver": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.4",
@@ -29,19 +38,17 @@
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.8.6",
-    "sequelize-cli": "^5.4.0",
+    "sequelize-cli": "^5.5.0",
     "slug": "^1.1.0",
     "uuid": "^3.3.2",
     "validatorjs": "^3.15.1"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
-    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-istanbul": "^5.1.4",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
+    "chai-uuid": "^1.0.6",
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -71,6 +78,16 @@
     "exclude": [
       "server/models/index.js",
       "server/tests"
-    ]
+    ],
+    "require": [
+      "@babel/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

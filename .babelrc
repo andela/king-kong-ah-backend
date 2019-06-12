@@ -1,8 +1,14 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": [
+    [
+    "@babel/preset-env",{
+      "targets": {"node": "current"}
+    }
+  ],
+],
   "env": {
     "test": {
-      "plugins": ["@babel/plugin-transform-runtime"]
+      "plugins": ["@babel/plugin-transform-runtime", "istanbul"]
     }
   },
   "plugins": [
@@ -17,7 +23,8 @@
           "<helpers>": "./server/helpers",
           "<middlewares>": "./server/middlewares",
           "<server>": "./server",
-          "<serverModels>": "./server/models"
+          "<serverModels>": "./server/models",
+          "<validations>":"./server/middlewares/validations"
         }
       }
     ]

@@ -4,7 +4,7 @@ export const newUser = {
   firstName: 'Lewis',
   lastName: 'Thomas',
   bio: 'Welcome to my world.',
-  password: '123456'
+  password: '12345678'
 };
 
 export const goodUserData = {
@@ -12,7 +12,7 @@ export const goodUserData = {
   username: 'testing',
   lastName: 'testing',
   firstName: 'testing',
-  password: 'testing'
+  password: 'testing12'
 };
 
 export const emptyUserData = {

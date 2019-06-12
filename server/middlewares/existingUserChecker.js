@@ -19,7 +19,7 @@ const validUserCheck = async (req, res, next) => {
   } else if (userEmailExist) {
     message = 'Email exist';
   } else if (userNameExist) {
-    message = 'Usename exist';
+    message = 'Username exist';
   }
   if (message) {
     return res.status(409).send({
