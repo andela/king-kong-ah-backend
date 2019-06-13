@@ -7,7 +7,7 @@
     "build-server": "babel server --out-dir dist",
     "build": "npm run clean && npm run build-server",
     "clean": "rm -rf dist && mkdir dist",
-    "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --exit",
+    "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --timeout 50000 --exit",
     "lint": "eslint '**/*js'",
     "lint:fix": "prettier-eslint --write '**/*js' ",
     "migration": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
@@ -26,8 +26,8 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
     "@sendgrid/mail": "^6.4.0",
-    "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-istanbul": "^5.1.4",
+    "babel-plugin-module-resolver": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -36,11 +36,15 @@
     "cors": "^2.8.4",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
     "jsonwebtoken": "^8.5.1",
     "mailgen": "^2.0.7",
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.8.6",
@@ -50,8 +54,6 @@
     "validatorjs": "^3.15.1"
   },
   "devDependencies": {
-    "chai-http": "^4.3.0",
-    "chai-uuid": "^1.0.6",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
@@ -59,6 +61,8 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.3.0",
+    "chai-uuid": "^1.0.6",
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -72,7 +76,7 @@
     "prettier-eslint-cli": "^4.7.1",
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0",
-    "sqlite3": "^4.0.8"
+    "sqlite3": "^4.0.9"
   },
   "lint-staged": {
     "*.js": [

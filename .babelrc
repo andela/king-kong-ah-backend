@@ -19,6 +19,7 @@
         "alias": {
           "<test>": "./server/tests",
           "<fixtures>": "./server/fixtures",
+          "<configs>": "./server/configs",
           "<controllers>": "./server/controllers",
           "<helpers>": "./server/helpers",
           "<middlewares>": "./server/middlewares",

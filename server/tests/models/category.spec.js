@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
+import models from '<serverModels>';
 import chai from 'chai';
 import chaiAsPromise from 'chai-as-promised';
-import models from '<serverModels>';
 
 chai.use(chaiAsPromise);
 
@@ -65,7 +65,8 @@ describe('Category Model', async () => {
     try {
       expect(category.id).to.be.a('string');
       await Category.destroy({ where: { id: category.id } });
-      expect(Category.findOne({ where: { id: category.id } })).to.rejectedWith(Error);
+      const found = await Category.findOne({ where: { id: category.id } });
+      expect(found).equal(null);
     } catch (error) {
       console.log(error);
     }
