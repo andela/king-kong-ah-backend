@@ -10,7 +10,7 @@
     "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --exit",
     "lint": "eslint '**/*js'",
     "lint:fix": "prettier-eslint --write '**/*js' ",
-    "migration": "npx sequelize-cli db:migrate",
+    "migration": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "start-dev": "nodemon ./server/app.js --exec babel-node",
     "start": "node dist/app.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",

@@ -1,12 +1,11 @@
 import models from '<serverModels>';
-import { article } from '<fixtures>/article';
 
 const { Article } = models;
 
 const createArticle = async (req, res) => {
   const { title, body } = req.body;
 
-  const categoryId = req.body.categoryId || article.categoryId;
+  const { categoryId } = req.body;
 
   const { userId } = req;
 

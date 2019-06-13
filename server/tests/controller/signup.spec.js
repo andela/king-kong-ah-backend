@@ -21,12 +21,12 @@ let setApiKey;
 let mailSender;
 const { TOKEN_EXPIRY_DATE, SECRET } = process.env;
 
-before(() => {
+beforeEach(() => {
   setApiKey = sinon.stub(sgMail, 'setApiKey');
   mailSender = sinon.stub(sgMail, 'send').returns(Promise.resolve({}));
 });
 
-after(() => {
+afterEach(() => {
   setApiKey.restore();
   mailSender.restore();
 });

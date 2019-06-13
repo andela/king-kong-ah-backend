@@ -1,6 +1,10 @@
+/* eslint-disable no-console */
+import models from '<server>/models';
 import { getUserData } from '<fixtures>/user';
 
-const signupUser = agent => new Promise((resolve) => {
+const { Category, User } = models;
+
+export const signupUser = agent => new Promise((resolve) => {
   agent
     .post('/api/v1/auth/signup')
     .send(getUserData({
@@ -19,4 +23,29 @@ const signupUser = agent => new Promise((resolve) => {
     });
 });
 
-export default signupUser;
+export const getCategoryId = async (values) => {
+  try {
+    const [category] = await Category.findOrCreate({
+      where: { name: values },
+      defaults: {
+        name: values
+      },
+    });
+    const { id } = category;
+    return id;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserId = async (email, username) => {
+  try {
+    const user = await User.create(getUserData({
+      email, username
+    }));
+    const { id } = user;
+    return id;
+  } catch (error) {
+    console.log(error);
+  }
+};
