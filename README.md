@@ -392,3 +392,7 @@ No additional parameters required
 ### Get Tags
 
 `GET /api/tags`
+
+## API Documentation
+
+Please view API Documentation [here](https://kingkongauthorshaven.docs.apiary.io/#)

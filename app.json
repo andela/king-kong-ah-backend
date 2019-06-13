@@ -1,0 +1,22 @@
+{
+  "name": "king-kong-ah-backend",
+  "description": "A community of like minded authors that fosters inspiration and innovation by leveraging the modern web.",
+  "env": {
+    "TOKEN_EXPIRY_DATE": {
+      "required": true
+    },
+    "COOKIE_EXPIRY_DATE": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": ["heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-18"
+}
+
+
