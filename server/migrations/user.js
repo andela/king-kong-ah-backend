@@ -39,6 +39,10 @@ const user = {
       type: Sequelize.BOOLEAN,
       default: false
     },
+    isVerified: {
+      type: Sequelize.BOOLEAN,
+      default: false
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

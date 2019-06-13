@@ -31,25 +31,27 @@ export const toLowerCaseAndTrim = (inputObject) => {
 
 /**
  * @param {string} id
+ * @param {string} isVerified
  * @param {string} tokenExpiryDate
  * @param {string} secret
  * @return {string} token
  */
-export const tokenGenerator = (id, tokenExpiryDate = 600, secret = 'secret') => {
-  const payload = { id };
+export const tokenGenerator = (id, isVerified, tokenExpiryDate = '1h', secret = 'secret') => {
+  const payload = { id, isVerified };
   const token = jwt.sign(payload, secret, { expiresIn: tokenExpiryDate });
   return token;
 };
 
 /**
  * @param {string} id
+ * @param {string} isVerified
  * @param {string} cookieExpiryDate
  * @param {object} res
  * @return {string} cookie
  */
-export const cookieGenerator = (id, cookieExpiryDate, res) => res.cookie(
+export const cookieGenerator = (id, isVerified, cookieExpiryDate = 3.6e6, res) => res.cookie(
   'access_token',
-  { token: tokenGenerator(id, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET) },
+  { token: tokenGenerator(id, isVerified, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET) },
   {
     maxAge: cookieExpiryDate,
     httpOnly: true,
@@ -116,3 +118,12 @@ export const validate = (data, rules, response, nextFunction) => {
   const check = checkValidation(data, rules);
   return check === true ? nextFunction() : displayError(check.error, response);
 };
+/**
+ * @param {string} hashedPassword
+ * @param {string} password
+ * @return {string} hash
+ */
+export const comparePassword = (hashedPassword, password) => bcrypt.compareSync(
+  password,
+  hashedPassword
+);

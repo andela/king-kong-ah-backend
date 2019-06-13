@@ -1,8 +1,13 @@
 /* eslint-disable no-console */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { hashPassword, tokenGenerator, createEllipsis } from '<helpers>/utils';
 import { newArticle } from '<fixtures>/article';
+import {
+  hashPassword,
+  tokenGenerator,
+  createEllipsis,
+  cookieGenerator
+} from '<helpers>/utils';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -40,8 +45,19 @@ describe('Helpers - Utils', () => {
 describe('Token Generator', () => {
   it('should generate token with default values', () => {
     try {
-      const token = tokenGenerator('5c1d4726-647e-4f77-a251-10381d3510f3');
+      const token = tokenGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false);
       expect(token).to.be.a('string');
+    } catch (error) {
+      console.log(error);
+    }
+  });
+});
+
+describe('Cookie Generator', () => {
+  it('should generate cookie with default values', () => {
+    try {
+      const cookie = cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false);
+      expect(cookie).to.be.a('string');
     } catch (error) {
       console.log(error);
     }
