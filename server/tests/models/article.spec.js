@@ -1,24 +1,31 @@
 /* eslint-disable no-console */
 import chai from 'chai';
+import chaiHttp from 'chai-http';
 import chaiAsPromise from 'chai-as-promised';
 import models from '<serverModels>';
 import { createEllipsis } from '<helpers>/utils';
 import { newArticle } from '<fixtures>/article';
+import { getUserData } from '<fixtures>/user';
 
 chai.use(chaiAsPromise);
 const { expect } = chai;
-const { Article, sequelize } = models;
+chai.use(chaiHttp);
+const { Article, User, sequelize } = models;
 
 before(async () => {
   try {
     await sequelize.sync({ force: true });
+    const user = await User.create(getUserData({
+      email: 'johnndoe@email.com', username: 'johnndoee'
+    }));
+    newArticle.userId = user.id;
   } catch (error) {
     console.log(error);
   }
 });
 
 describe('Article Model', async () => {
-  it('should create an artcle', async () => {
+  it('should create an article', async () => {
     let article;
     try {
       article = await Article.create(newArticle);

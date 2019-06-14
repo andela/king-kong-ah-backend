@@ -18,17 +18,25 @@ const signUp = async (req, res) => {
     isVerified: false,
     password: req.body.password
   };
-  const newUser = await User.create(userData);
 
-  cookieGenerator(newUser.id, newUser.isVerified, process.env.COOKIE_EXPIRY_DATE, res);
+  try {
+    const newUser = await User.create(userData);
 
-  const { password, ...userInfo } = newUser.dataValues;
+    cookieGenerator(newUser.id, newUser.isVerified, process.env.COOKIE_EXPIRY_DATE, res);
 
-  return res.status(201).send({
-    status: 'success',
-    message: 'User created successfully',
-    data: userInfo
-  });
+    const { password, ...userInfo } = newUser.dataValues;
+
+    return res.status(201).send({
+      status: 'success',
+      message: 'User created successfully',
+      data: userInfo
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'Server error'
+    });
+  }
 };
 
 export default signUp;

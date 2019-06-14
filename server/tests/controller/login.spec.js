@@ -43,7 +43,7 @@ describe('User SignIn', () => {
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res).to.be.an('object');
-        expect(res).to.have.cookie('access_token');
+        expect(res).to.have.cookie('access-token');
         expect(res.body)
           .to.have.property('message')
           .equal('Login successful');

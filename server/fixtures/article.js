@@ -14,7 +14,6 @@ export const newArticle = {
   isPublished: true
 };
 
-
 export const emptyArticleData = {};
 
 export const invalidTitle = largeText;
@@ -31,3 +30,9 @@ export const getArticleData = args => ({
   ...goodArticleData,
   ...args
 });
+
+export const article = {
+  title: 'First Article',
+  body: 'This is the first article',
+  categoryId: '325163a1-6e8c-4cd8-b5d3-7019c49983f5',
+};
