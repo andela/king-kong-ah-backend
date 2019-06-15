@@ -12,7 +12,10 @@ const createArticle = async (req, res) => {
 
   try {
     const newArticle = await Article.create({
-      title, body, userId, categoryId,
+      title,
+      body,
+      userId,
+      categoryId
     });
 
     res.status(201).json({

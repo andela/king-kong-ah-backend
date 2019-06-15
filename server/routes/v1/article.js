@@ -1,6 +1,6 @@
 import express from 'express';
 import articles from '<controllers>/article';
-import verifyUser from '<middlewares>/verifyUser';
+import { verifyUser } from '<middlewares>/verifyUser';
 import { validateCreateArticle } from '<validations>/article';
 
 const article = express.Router();

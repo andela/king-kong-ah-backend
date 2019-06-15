@@ -34,5 +34,5 @@ export const getArticleData = args => ({
 export const article = {
   title: 'First Article',
   body: 'This is the first article',
-  categoryId: '325163a1-6e8c-4cd8-b5d3-7019c49983f5',
+  categoryId: '325163a1-6e8c-4cd8-b5d3-7019c49983f5'
 };

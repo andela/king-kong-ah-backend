@@ -3,7 +3,6 @@ import chaiHttp from 'chai-http';
 import app from '<server>/app';
 import { getUserData, emptyUserData } from '<fixtures>/user';
 
-
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -16,10 +15,13 @@ describe('User Login validations', () => {
       .end((err, res) => {
         expect(res.status && res.body.status).to.be.equal(400);
         expect(res).to.be.an('object');
-        expect(res.body)
-          .to.have.property('error');
-        expect(res.body.error.email).to.be.an('array').that.does.include('The email field is required.');
-        expect(res.body.error.password).to.be.an('array').that.does.include('The password field is required.');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message.email)
+          .to.be.an('array')
+          .that.does.include('The email field is required.');
+        expect(res.body.message.password)
+          .to.be.an('array')
+          .that.does.include('The password field is required.');
         done();
       });
   });
@@ -30,7 +32,9 @@ describe('User Login validations', () => {
       .post('/api/v1/auth/login')
       .send(getUserData({ email: 'testing' }))
       .end((err, res) => {
-        expect(res.body.error.email).to.be.an('array').that.does.include('The email format is invalid.');
+        expect(res.body.message.email)
+          .to.be.an('array')
+          .that.does.include('The email format is invalid.');
         done();
       });
   });
@@ -41,7 +45,9 @@ describe('User Login validations', () => {
       .post('/api/v1/auth/login')
       .send(getUserData({ password: 'test' }))
       .end((err, res) => {
-        expect(res.body.error.password).to.be.an('array').that.does.include('The password must be at least 8 characters.');
+        expect(res.body.message.password)
+          .to.be.an('array')
+          .that.does.include('The password must be at least 8 characters.');
         done();
       });
   });
@@ -52,7 +58,9 @@ describe('User Login validations', () => {
       .post('/api/v1/auth/login')
       .send(getUserData({ password: 'testings' }))
       .end((err, res) => {
-        expect(res.body.error.password).to.be.an('array').that.does.include('The password format is invalid.');
+        expect(res.body.message.password)
+          .to.be.an('array')
+          .that.does.include('The password format is invalid.');
         done();
       });
   });

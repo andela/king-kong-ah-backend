@@ -40,7 +40,7 @@ const Articles = {
     },
     categoryId: {
       type: Sequelize.UUID,
-      allowNull: false,
+      allowNull: false
     },
     isPublished: {
       type: Sequelize.BOOLEAN,

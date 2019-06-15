@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { decodeToken, displayError } from '<helpers>/utils';
 
-const verifyUser = (req, res, next) => {
+export const verifyUser = (req, res, next) => {
   const { token } = req.cookies['access-token'];
 
   const decoded = jwt.verify(token, process.env.SECRET);
@@ -8,4 +9,14 @@ const verifyUser = (req, res, next) => {
   next();
 };
 
-export default verifyUser;
+export const verifyUserToken = (req, res, next) => {
+  try {
+    const { token } = req.query;
+    const { id } = decodeToken(token);
+    req.verifyUserId = id;
+    next();
+  } catch (e) {
+    const err = new Error('Invalid token');
+    return displayError(err, res, 403);
+  }
+};
