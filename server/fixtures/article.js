@@ -26,13 +26,14 @@ export const goodArticleData = {
   categoryId: 'bd74c8da-4d9e-11e7-b114-b2f933d5fe66'
 };
 
-export const getArticleData = args => ({
-  ...goodArticleData,
+
+export const getArticleData = (article, args) => ({
+  ...article,
   ...args
 });
 
+
 export const article = {
   title: 'First Article',
-  body: 'This is the first article',
-  categoryId: '325163a1-6e8c-4cd8-b5d3-7019c49983f5'
+  body: 'This is the first article'
 };
