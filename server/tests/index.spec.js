@@ -4,6 +4,8 @@ import './helpers/utils.spec';
 import './models/user.spec';
 import './models/category.spec';
 import './models/article.spec';
+import './models/tag.spec';
+import './models/tagArticle.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/socialAuth.spec';

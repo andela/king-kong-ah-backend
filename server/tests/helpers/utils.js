@@ -2,7 +2,7 @@
 import models from '<server>/models';
 import { getUserData } from '<fixtures>/user';
 
-const { Category, User } = models;
+const { Category, User, Tag } = models;
 
 export const signupUser = agent => new Promise((resolve) => {
   agent
@@ -44,6 +44,21 @@ export const getUserId = async (email, username) => {
       email, username
     }));
     const { id } = user;
+    return id;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTagId = async (values) => {
+  try {
+    const [tag] = await Tag.findOrCreate({
+      where: { name: values },
+      defaults: {
+        name: values
+      },
+    });
+    const { id } = tag;
     return id;
   } catch (error) {
     console.log(error);
