@@ -1,4 +1,4 @@
-import { toLowerCaseAndTrim } from '<helpers>/utils';
+import { toLowerCaseAndTrim, displayError } from '<helpers>/utils';
 import model from '<serverModels>';
 
 const { User } = model;
@@ -22,10 +22,8 @@ const validUserCheck = async (req, res, next) => {
     message = 'Username exist';
   }
   if (message) {
-    return res.status(409).send({
-      status: 409,
-      message
-    });
+    const err = new Error(message);
+    return displayError(err, res, 409);
   }
   req.formattedValues = formattedValues;
   next();

@@ -27,6 +27,7 @@
           "<serverModels>": "./server/models",
           "<validations>":"./server/middlewares/validations",
           "<emails>": "./server/emailTemplates",
+          "<middlewaresPassport>": "./server/middlewares/passport",
         }
       }
     ]

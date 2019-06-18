@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Validator from 'validatorjs';
 
+export const uuidFormat = 'regex:/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}/';
+
 /**
  * @param {string} password
  * @return {string} hash
@@ -142,3 +144,18 @@ export const getBaseUrl = fullUrl => fullUrl.slice(0, fullUrl.lastIndexOf('/'));
  * @return {object} decodeToken
  */
 export const decodeToken = token => jwt.verify(token, process.env.SECRET);
+
+/**
+ * @param {object} data
+ * @param {string} message
+ * @param {object} res
+ * @param {number} status
+ * @return {object} response
+ */
+export const handleSuccessResponse = (data, message, res, status = 200) => (
+  res.status(status).json({
+    status: 'success',
+    message,
+    data
+  })
+);

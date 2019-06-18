@@ -1,4 +1,5 @@
 import models from '<serverModels>';
+import { displayError, handleSuccessResponse } from '../helpers/utils';
 
 const { Article } = models;
 
@@ -17,16 +18,10 @@ const createArticle = async (req, res) => {
       categoryId
     });
 
-    res.status(201).json({
-      status: 'success',
-      message: 'Article created successfully',
-      data: newArticle
-    });
+    return handleSuccessResponse(newArticle, 'Article created successfully', res, 201);
   } catch (error) {
-    res.status(500).json({
-      status: 'failed',
-      message: 'Server error'
-    });
+    const err = new Error('Server error');
+    return displayError(err, res, 500);
   }
 };
 

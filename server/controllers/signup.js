@@ -1,5 +1,5 @@
 import model from '<serverModels>';
-import { cookieGenerator } from '<helpers>/utils';
+import { cookieGenerator, displayError, handleSuccessResponse } from '<helpers>/utils';
 import generateEmail from '<emails>/verification';
 import sendMail from '<helpers>/emails';
 
@@ -36,16 +36,10 @@ const signUp = async (req, res) => {
       verificationEmail
     );
 
-    return res.status(201).send({
-      status: 'success',
-      message: 'User created successfully',
-      data: userInfo
-    });
+    return handleSuccessResponse(userInfo, 'User created successfully', res, 201);
   } catch (error) {
-    res.status(500).json({
-      status: 'failed',
-      message: 'Server error'
-    });
+    const err = new Error('Server error');
+    return displayError(err, res, 500);
   }
 };
 
