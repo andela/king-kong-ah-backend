@@ -6,9 +6,17 @@ const user = {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4
     },
+    oauthId: {
+      unique: true,
+      type: Sequelize.STRING
+    },
+    type: {
+      allowNull: false,
+      type: Sequelize.STRING,
+      defaultValue: 'normal'
+    },
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
       unique: true
     },
     username: {
@@ -37,11 +45,11 @@ const user = {
     },
     isAdmin: {
       type: Sequelize.BOOLEAN,
-      default: false
+      defaultValue: false
     },
     isVerified: {
       type: Sequelize.BOOLEAN,
-      default: false
+      defaultValue: false
     },
     createdAt: {
       allowNull: false,

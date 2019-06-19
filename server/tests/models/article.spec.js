@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import chaiAsPromise from 'chai-as-promised';
 import models from '<serverModels>';
 import { newArticle, getArticleData } from '<fixtures>/article';
 import { createEllipsis } from '<helpers>/utils';
 import { getUserId, getCategoryId } from '<test>/helpers/utils';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import chaiAsPromise from 'chai-as-promised';
 
 chai.use(chaiAsPromise);
 
@@ -13,10 +13,7 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-const {
-  Article,
-  sequelize
-} = models;
+const { Article, sequelize } = models;
 
 let article;
 let articleData;
@@ -30,17 +27,18 @@ before(async () => {
 });
 
 describe('Article Model', async () => {
+  before(async () => {
+    const newUserId = await getUserId('johnndoeh1@email.com', 'johnndoeeh2');
+    const newCategoryId = await getCategoryId('technology');
+    articleData = getArticleData(newArticle, { userId: newUserId, categoryId: newCategoryId });
+  });
+
   it('should create an artcle', async () => {
     try {
-      const newUserId = await getUserId('johnndoeh@email.com', 'johnndoeeh');
-      const newCategoryId = await getCategoryId('technology');
-      articleData = getArticleData(newArticle, { userId: newUserId, categoryId: newCategoryId });
       article = await Article.create(articleData);
-
       const {
         title, body, description, userId, isBlacklisted, categoryId, isPublished
       } = article;
-
       expect(articleData.title).to.be.equal(title);
       expect(articleData.body).to.be.equal(body);
       expect(articleData.userId).to.be.equal(userId);
@@ -58,7 +56,8 @@ describe('Article Model', async () => {
       article = await Article.create(articleData);
       expect(article.id).to.be.a('string');
       await Article.destroy({ where: { id: article.id } });
-      expect(Article.findOne({ where: { id: article.id } })).to.rejectedWith(Error);
+      const found = await Article.findOne({ where: { id: article.id } });
+      expect(found).to.be.equal(null);
     } catch (error) {
       console.log(error);
     }

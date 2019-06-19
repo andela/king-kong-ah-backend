@@ -10,14 +10,19 @@ const user = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
+      oauthId: {
+        unique: true,
+        type: DataTypes.STRING
+      },
+      type: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: 'normal'
+      },
       email: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
         validate: {
-          notNull: {
-            msg: 'Email is required.'
-          },
           isEmail: {
             msg: 'Email field must be an email.'
           }
@@ -25,13 +30,7 @@ const user = (sequelize, DataTypes) => {
       },
       username: {
         type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Username is required.'
-          }
-        }
+        unique: true
       },
       bio: {
         type: DataTypes.TEXT,
@@ -79,7 +78,7 @@ const user = (sequelize, DataTypes) => {
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        default: false
+        defaultValue: false
       }
     },
     {}

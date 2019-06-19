@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import chai from 'chai';
-
-import chaiHttp from 'chai-http';
 import models from '<serverModels>';
 import { newUser } from '<fixtures>/user';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -127,28 +126,6 @@ const modelTest = describe('Model - User', () => {
       } catch (error) {
         expect(error).to.be.an.instanceof(Error);
         expect(error.errors[0].message).to.equal('username must be unique');
-      }
-    });
-
-    it('should require email', async () => {
-      const newUser1 = { ...newUser, email: undefined };
-      try {
-        const user = await User.create(newUser1);
-        expect(user).to.equal(undefined);
-      } catch (error) {
-        expect(error).to.be.an.instanceof(Error);
-        expect(error.errors[0].message).to.equal('Email is required.');
-      }
-    });
-
-    it('should require username', async () => {
-      const newUser1 = { ...newUser, username: undefined };
-      try {
-        const user = await User.create(newUser1);
-        expect(user).to.equal(undefined);
-      } catch (error) {
-        expect(error).to.be.an.instanceof(Error);
-        expect(error.errors[0].message).to.equal('Username is required.');
       }
     });
 

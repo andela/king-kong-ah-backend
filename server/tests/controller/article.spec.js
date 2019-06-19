@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 import app from '<server>/app';
 import models from '<server>/models';
 import { article } from '<fixtures>/article';
 import createArticle from '<controllers>/article';
 import { signupUser, getCategoryId } from '<test>/helpers/utils';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 
@@ -27,7 +27,6 @@ before(async () => {
   }
 });
 
-
 afterEach(() => sinon.restore());
 
 const agent = chai.request.agent(app);
@@ -40,17 +39,17 @@ describe('Create an Article', async () => {
         agent
           .post('/api/v1/articles')
           .send(article)
-          .then((res) => {
+          .end((err, res) => {
             expect(res.status).to.be.equal(201);
             expect(res).to.have.status(201);
             expect(res.body)
               .to.have.property('message')
               .equal('Article created successfully');
+            done();
           });
-        done();
       })
       .catch((err) => {
-        done(err);
+        console.log(err);
       });
   });
 
@@ -64,7 +63,6 @@ describe('Create an Article', async () => {
     sinon.stub(res, 'status').returnsThis();
     sinon.stub(Article, 'create').throws();
     await createArticle(req, res);
-    console.log(req.body);
     expect(res.status).to.have.been.calledWith(500);
   });
 });
