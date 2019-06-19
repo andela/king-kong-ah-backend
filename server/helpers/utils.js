@@ -36,10 +36,14 @@ export const toLowerCaseAndTrim = (inputObject) => {
  * @param {string} isVerified
  * @param {string} tokenExpiryDate
  * @param {string} secret
+ * @param {string} email
  * @return {string} token
  */
-export const tokenGenerator = (id, isVerified, tokenExpiryDate = '1h', secret = 'secret') => {
+export const tokenGenerator = (id, isVerified, tokenExpiryDate = '1h', secret = 'secret', email) => {
   const payload = { id, isVerified };
+  if (email) {
+    payload.email = email;
+  }
   const token = jwt.sign(payload, secret, { expiresIn: tokenExpiryDate });
   return token;
 };

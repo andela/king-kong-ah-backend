@@ -19,7 +19,7 @@ export const authentication = async (req, res, next) => {
   }
   req.user = {
     id: userData.id,
-    isVerified: userData.isVerified
+    isVerified: userData.isVerified,
   };
   next();
 };
