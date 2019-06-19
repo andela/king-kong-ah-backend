@@ -1,10 +1,10 @@
-import setPassportMiddleware from '<middlewares>/passport/strategies';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import env from 'dotenv';
 import passport from 'passport';
 import router from './routes';
+import setPassportMiddleware from '<middlewaresPassport>/strategies';
 
 env.config();
 const app = express();

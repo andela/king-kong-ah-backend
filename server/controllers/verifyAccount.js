@@ -1,5 +1,5 @@
 import model from '<serverModels>';
-import { displayError } from '<helpers>/utils';
+import { displayError, handleSuccessResponse } from '<helpers>/utils';
 
 const { User } = model;
 
@@ -9,11 +9,7 @@ const verifyAccount = async (req, res) => {
     const user = await User.findByPk(id);
     const updatedUser = await user.update({ isVerified: true });
     const { isVerified } = updatedUser.dataValues;
-    return res.status(200).send({
-      status: 'success',
-      message: 'User email verified successfully',
-      data: { isVerified }
-    });
+    return handleSuccessResponse({ isVerified }, 'User email verified successfully', res);
   } catch (err) {
     displayError(err, res, 403);
   }

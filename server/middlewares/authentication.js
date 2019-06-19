@@ -1,5 +1,5 @@
 import model from '<serverModels>';
-import { comparePassword } from '<helpers>/utils';
+import { comparePassword, displayError } from '<helpers>/utils';
 
 const { User } = model;
 
@@ -9,17 +9,13 @@ export const authentication = async (req, res, next) => {
   const userData = await User.findOne({ where: { email } });
 
   if (!userData) {
-    return res.status(404).send({
-      status: 'error',
-      message: 'User does not exist'
-    });
+    const err = new Error('User does not exist');
+    return displayError(err, res, 404);
   }
 
   if (userData && !comparePassword(userData.password, password)) {
-    return res.status(400).send({
-      status: 'error',
-      message: 'User credentials are invalid'
-    });
+    const err = new Error('User credentials are invalid');
+    return displayError(err, res);
   }
   req.user = {
     id: userData.id,

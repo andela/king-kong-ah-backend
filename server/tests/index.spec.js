@@ -1,4 +1,5 @@
 import './miscellaneous/miscellaneous.spec';
+import './controller/profile.spec';
 import './helpers/utils.spec';
 import './models/user.spec';
 import './models/category.spec';

@@ -1,6 +1,4 @@
-import { validate } from '<helpers>/utils';
-
-const uuidFormat = 'regex:/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}/';
+import { validate, uuidFormat } from '<helpers>/utils';
 
 /**
  * validate create article endpoint
