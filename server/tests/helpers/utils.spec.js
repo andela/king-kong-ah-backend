@@ -14,13 +14,10 @@ const { expect } = chai;
 describe('Helpers - Utils', () => {
   describe('Hash password successfully', () => {
     it('should hash variable', () => {
-      try {
-        const password = '1234567890';
-        const hash = hashPassword(password);
-        expect(hash).to.not.equal(password);
-      } catch (error) {
-        console.log(error);
-      }
+      const password = '1234567890';
+      const hash = hashPassword(password);
+
+      expect(hash).to.not.equal(password);
     });
   });
 
@@ -43,23 +40,22 @@ describe('Helpers - Utils', () => {
 
 describe('Token Generator', () => {
   it('should generate token with default values', () => {
+    let token;
     try {
-      const token = tokenGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false);
-      expect(token).to.be.a('string');
+      token = tokenGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false);
     } catch (error) {
       console.log(error);
     }
+
+    expect(token).to.be.a('string');
   });
 });
 
 describe('Cookie Generator', () => {
   it('should generate cookie with default values', () => {
-    try {
-      cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false, 3600, res);
-      cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false, undefined, res);
-      expect(res.token).to.be.a('string');
-    } catch (error) {
-      console.log(error);
-    }
+    cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false, 3600, res);
+    cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false, undefined, res);
+
+    expect(res.token).to.be.a('string');
   });
 });

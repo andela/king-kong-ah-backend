@@ -2,7 +2,7 @@
 import models from '<server>/models';
 import { getUserData } from '<fixtures>/user';
 
-const { Category, User, Tag } = models;
+const { Category, User, Tag, Article } = models;
 
 export const signupUser = agent => agent
   .post('/api/v1/auth/signup')
@@ -54,6 +54,23 @@ export const getTagId = async (values) => {
       },
     });
     const { id } = tag;
+    return id;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const getArticleId = async (title, body, userId) => {
+  try {
+    const categoryId = await getCategoryId('technology');
+    const newArticle = await Article.create({
+      title,
+      body,
+      userId,
+      categoryId
+    });
+    const { id } = newArticle;
     return id;
   } catch (error) {
     console.log(error);

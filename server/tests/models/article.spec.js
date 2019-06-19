@@ -36,30 +36,30 @@ describe('Article Model', async () => {
   it('should create an artcle', async () => {
     try {
       article = await Article.create(articleData);
-      const {
-        title, body, description, userId, isBlacklisted, categoryId, isPublished
-      } = article;
-      expect(articleData.title).to.be.equal(title);
-      expect(articleData.body).to.be.equal(body);
-      expect(articleData.userId).to.be.equal(userId);
-      expect(articleData.isBlacklisted).to.be.equal(isBlacklisted);
-      expect(articleData.categoryId).to.be.equal(categoryId);
-      expect(articleData.isPublished).to.be.equal(isPublished);
-      expect(description).to.be.equal(createEllipsis(body));
     } catch (error) {
       console.log(error);
     }
+    const {
+      title, body, description, userId, isBlacklisted, categoryId, isPublished
+    } = article;
+
+    expect(articleData.title).to.be.equal(title);
+    expect(articleData.body).to.be.equal(body);
+    expect(articleData.userId).to.be.equal(userId);
+    expect(articleData.isBlacklisted).to.be.equal(isBlacklisted);
+    expect(articleData.categoryId).to.be.equal(categoryId);
+    expect(articleData.isPublished).to.be.equal(isPublished);
+    expect(description).to.be.equal(createEllipsis(body));
   });
 
   it('should delete an article', async () => {
+    let found;
     try {
-      article = await Article.create(articleData);
-      expect(article.id).to.be.a('string');
       await Article.destroy({ where: { id: article.id } });
-      const found = await Article.findOne({ where: { id: article.id } });
-      expect(found).to.be.equal(null);
+      found = await Article.findOne({ where: { id: article.id } });
     } catch (error) {
       console.log(error);
     }
+    expect(found).to.be.equal(null);
   });
 });

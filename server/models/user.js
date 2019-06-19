@@ -95,6 +95,12 @@ const user = (sequelize, DataTypes) => {
       target: 'id',
       onDelete: 'CASCADE'
     });
+
+    User.hasMany(models.Comment, {
+      foreignKey: 'userId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
   };
 
   return User;
