@@ -3,7 +3,7 @@ import app from '<server>/app';
 import models from '<server>/models';
 import { article } from '<fixtures>/article';
 import createArticle from '<controllers>/article';
-import { signupUser, getCategoryId } from '<test>/helpers/utils';
+import { loginUser, getCategoryId } from '<test>/helpers/utils';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
@@ -34,7 +34,7 @@ const agent = chai.request.agent(app);
 describe('Create an Article', async () => {
   it('should create a new article', (done) => {
     article.categoryId = categoryId;
-    signupUser(agent)
+    loginUser(agent)
       .then(() => {
         agent
           .post('/api/v1/articles')
