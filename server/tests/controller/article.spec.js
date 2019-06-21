@@ -38,16 +38,22 @@ describe('Create an Article', () => {
 
   it('should create a new article', (done) => {
     article.categoryId = categoryId;
-    agent
-      .post('/api/v1/articles')
-      .send(article)
-      .end((err, res) => {
-        expect(res.status).to.be.equal(201);
-        expect(res).to.have.status(201);
-        expect(res.body)
-          .to.have.property('message')
-          .equal('Article created successfully');
-        done();
+    loginUser(agent)
+      .then(() => {
+        agent
+          .post('/api/v1/articles')
+          .send(article)
+          .end((err, res) => {
+            expect(res.status).to.be.equal(201);
+            expect(res).to.have.status(201);
+            expect(res.body)
+              .to.have.property('message')
+              .equal('Article created successfully');
+            done();
+          });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   });
 

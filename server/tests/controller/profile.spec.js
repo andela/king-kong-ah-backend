@@ -16,36 +16,27 @@ const { sequelize, User } = models;
 let userId;
 
 before(async () => {
-  try {
-    await sequelize.sync({ force: true });
-  } catch (error) {
-    console.log(error);
-  }
+  await sequelize.sync({ force: true });
 });
+
+afterEach(() => sinon.restore());
 
 const agent = chai.request.agent(app);
 
 describe('Profile - controller', () => {
-  let user;
-  before(async () => {
-    try {
-      user = await signupUser(agent);
-      userId = user.body.data.id;
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   it('should update a user profile', (done) => {
-    agent
-      .patch('/api/v1/profile')
-      .send({ bio: 'Welcome to my world.' })
-      .then((res) => {
-        expect(user.body.status).to.be.equal('success');
-        expect(res.status).to.be.equal(200);
-        expect(res.body.data.id).to.be.a('string');
-        expect(res.body.message).to.equal('Profile updated successfully');
-        expect(res.body.data.bio).to.equal('Welcome to my world.');
+    signupUser(agent)
+      .then(() => {
+        agent
+          .patch('/api/v1/profile')
+          .send({ bio: 'Welcome to my world.' })
+          .then((res) => {
+            userId = res.body.data.id;
+            expect(res.status).to.be.equal(200);
+            expect(res.body.data.id).to.be.a('string');
+            expect(res.body.message).to.equal('Profile updated successfully');
+            expect(res.body.data.bio).to.equal('Welcome to my world.');
+          });
         done();
       })
       .catch((err) => {
@@ -54,7 +45,7 @@ describe('Profile - controller', () => {
   });
 
   it('should return server error for profile update controller', async () => {
-    const req = { userId, body: { bio: 'Welcome to my world.' } };
+    const req = { body: { bio: 'Welcome to my world.' } };
     const res = {
       status() {},
       json() {}
@@ -67,13 +58,16 @@ describe('Profile - controller', () => {
     stubUser.restore();
   });
 
-  it("should fetch a user's profile", (done) => {
-    agent
-      .get(`/api/v1/profile/${userId}`)
-      .then((res) => {
-        expect(res.status).to.be.equal(200);
-        expect(res.body.message).to.equal('User profile');
-        expect(res.body.data.bio).to.equal('Welcome to my world.');
+  it('should fetch a user\'s profile', (done) => {
+    signupUser(agent)
+      .then(() => {
+        agent
+          .get(`/api/v1/profile/${userId}`)
+          .then((res) => {
+            expect(res.status).to.be.equal(200);
+            expect(res.body.message).to.equal('User profile');
+            expect(res.body.data.bio).to.equal('Welcome to my world.');
+          });
         done();
       })
       .catch((err) => {
@@ -82,12 +76,18 @@ describe('Profile - controller', () => {
   });
 
   it('should return 404 for empty param', (done) => {
-    agent.get('/api/v1/profile').then((res) => {
-      expect(res.status).to.be.equal(404);
-    });
-    done().catch((err) => {
-      done(err);
-    });
+    signupUser(agent)
+      .then(() => {
+        agent
+          .get('/api/v1/profile')
+          .then((res) => {
+            expect(res.status).to.be.equal(404);
+          });
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
   });
 
   it('should return server error for getProfile controller', async () => {
@@ -96,23 +96,22 @@ describe('Profile - controller', () => {
       status() {},
       json() {}
     };
-    try {
-      const stubStatus = sinon.stub(res, 'status').returnsThis();
-      const stubUser = sinon.stub(User, 'findByPk').throws();
-      await getUserProfile(req, res);
-      expect(res.status).to.have.been.calledWith(500);
-      stubStatus.restore();
-      stubUser.restore();
-    } catch (error) {
-      console.log(error);
-    }
+    const stubStatus = sinon.stub(res, 'status').returnsThis();
+    const stubUser = sinon.stub(User, 'findByPk').throws();
+    await getUserProfile(req, res);
+    expect(res.status).to.have.been.calledWith(500);
+    stubStatus.restore();
+    stubUser.restore();
   });
 
   it('should return 400 for invalid uuid param', (done) => {
-    agent
-      .get('/api/v1/profile/123')
-      .then((res) => {
-        expect(res.status).to.be.equal(400);
+    signupUser(agent)
+      .then(() => {
+        agent
+          .get('/api/v1/profile/123')
+          .then((res) => {
+            expect(res.status).to.be.equal(400);
+          });
         done();
       })
       .catch((err) => {
@@ -121,10 +120,13 @@ describe('Profile - controller', () => {
   });
 
   it('should return error 404 for valid uuid format with no profile found', (done) => {
-    agent
-      .get(`/api/v1/profile/a${userId}`)
-      .then((res) => {
-        expect(res.status).to.be.equal(404);
+    signupUser(agent)
+      .then(() => {
+        agent
+          .get(`/api/v1/profile/a${userId}`)
+          .then((res) => {
+            expect(res.status).to.be.equal(404);
+          });
         done();
       })
       .catch((err) => {
