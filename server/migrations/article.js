@@ -42,6 +42,10 @@ const Articles = {
       type: Sequelize.UUID,
       allowNull: false
     },
+    articleImage: {
+      type: Sequelize.TEXT,
+      allowNull: true
+    },
     isPublished: {
       type: Sequelize.BOOLEAN,
       allowNull: false

@@ -3,7 +3,7 @@ import { displayError, handleSuccessResponse } from '../helpers/utils';
 
 const { Article } = models;
 
-const createArticle = async (req, res) => {
+export const createArticle = async (req, res) => {
   const { title, body } = req.body;
 
   const { categoryId } = req.body;
@@ -25,4 +25,19 @@ const createArticle = async (req, res) => {
   }
 };
 
-export default createArticle;
+export const getArticles = async (req, res) => {
+  try {
+    const articles = await Article.findAll({
+      where: { isPublished: true }
+    });
+
+    if (!articles.length) {
+      handleSuccessResponse(null, 'No article published at the moment', res, 200);
+    } else {
+      handleSuccessResponse(articles, 'Article retrieved successfully', res, 200);
+    }
+  } catch (error) {
+    const err = new Error('Server error');
+    displayError(err, res, 500);
+  }
+};

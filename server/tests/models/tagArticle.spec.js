@@ -50,9 +50,8 @@ describe('Tag Article relationship', async () => {
     await article.addTags(tagId2);
     const articleTags = await article.getTags();
     const articleTagsId = articleTags.map(getTags => getTags.dataValues.id);
-
-    expect(articleTagsId).to.be.an('array').that.does.include(tagId);
-    expect(articleTagsId).to.be.an('array').that.does.include(tagId2);
+    await expect(articleTagsId).to.be.an('array').that.does.include(tagId);
+    await expect(articleTagsId).to.be.an('array').that.does.include(tagId2);
   });
 
   it('should not tag article twice with same tag name', async () => {

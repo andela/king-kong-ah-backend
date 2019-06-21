@@ -57,6 +57,15 @@ const article = (sequelize, DataTypes) => {
           isUUID: 4
         }
       },
+      articleImage: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        validate: {
+          isUrl: {
+            msg: 'Article image must be a url.'
+          }
+        }
+      },
       isPublished: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
