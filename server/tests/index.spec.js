@@ -5,6 +5,7 @@ import './models/category.spec';
 import './models/article.spec';
 import './models/tag.spec';
 import './models/tagArticle.spec';
+import './models/comment.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/socialAuth.spec';

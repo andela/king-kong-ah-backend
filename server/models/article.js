@@ -97,6 +97,12 @@ const article = (sequelize, DataTypes) => {
     Article.belongsToMany(models.Tag, {
       through: 'TagArticles'
     });
+
+    Article.hasMany(models.Comment, {
+      foreignKey: 'articleId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
   };
   return Article;
 };

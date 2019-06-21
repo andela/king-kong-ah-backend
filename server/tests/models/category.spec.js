@@ -24,9 +24,9 @@ describe('Category Model', async () => {
     try {
       const emptyCategory = { name: '' };
       category = await Category.create(emptyCategory);
-      expect(category).to.equal(undefined);
     } catch (error) {
       expect(error).to.be.an.instanceof(Error);
+      expect(category).to.equal(undefined);
     }
   });
 
@@ -34,8 +34,8 @@ describe('Category Model', async () => {
     try {
       const invalidCategory = { name: 123 };
       category = await Category.create(invalidCategory);
-      expect(category).to.equal(undefined);
     } catch (error) {
+      expect(category).to.equal(undefined);
       expect(error).to.be.an.instanceof(Error);
       expect(error.errors[0].message).to.equal('Category can only be a string.');
     }
@@ -44,31 +44,34 @@ describe('Category Model', async () => {
   it('should create an category', async () => {
     try {
       category = await Category.create({ name: 'defaults' });
-      const { id, name } = category;
-      expect(id).to.be.a('string');
-      expect(name).to.be.equal('defaults');
     } catch (error) {
       console.log(error);
     }
+    const { id, name } = category;
+
+    expect(id).to.be.a('string');
+    expect(name).to.be.equal('defaults');
   });
 
   it('should not allow duplicate category name', async () => {
+    let newCategory;
     try {
-      category = await Category.create({ name: 'defaults' });
-      expect(category).to.equal(undefined);
+      newCategory = await Category.create({ name: 'defaults' });
     } catch (error) {
+      expect(newCategory).to.equal(undefined);
       expect(error).to.be.an.instanceof(Error);
     }
   });
 
   it('should delete a category', async () => {
+    let found;
+
     try {
-      expect(category.id).to.be.a('string');
       await Category.destroy({ where: { id: category.id } });
-      const found = await Category.findOne({ where: { id: category.id } });
-      expect(found).equal(null);
+      found = await Category.findOne({ where: { id: category.id } });
     } catch (error) {
       console.log(error);
     }
+    expect(found).equal(null);
   });
 });
