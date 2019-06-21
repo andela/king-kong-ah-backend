@@ -107,8 +107,12 @@ const user = (sequelize, DataTypes) => {
       target: 'id',
       onDelete: 'CASCADE'
     });
-  };
 
+    User.belongsToMany(models.Article, {
+      through: 'ReadingStats',
+      as: 'Read'
+    });
+  };
   return User;
 };
 

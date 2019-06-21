@@ -22,6 +22,7 @@ const article = (sequelize, DataTypes) => {
       },
       slug: {
         type: DataTypes.STRING,
+        unique: true,
         validate: {
           notEmpty: true
         }
@@ -92,6 +93,10 @@ const article = (sequelize, DataTypes) => {
     Article.belongsTo(models.Category, {
       foreignKey: 'categoryId',
       as: 'category'
+    });
+
+    Article.belongsToMany(models.User, {
+      through: 'ReadingStats'
     });
 
     Article.belongsToMany(models.Tag, {
