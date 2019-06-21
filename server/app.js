@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import env from 'dotenv';
 import passport from 'passport';
 import router from './routes';
-import setPassportMiddleware from '<middlewaresPassport>/strategies';
+import setPassportMiddleware from '<middlewares>/passport/strategies';
 
 env.config();
 const app = express();

@@ -1,10 +1,11 @@
 import express from 'express';
-import articles from '<controllers>/article';
-import { verifyUser } from '<middlewares>/verifyUser';
+import { createArticle, getArticles } from '<controllers>/article';
+import { verifyUser, checkIsVerified } from '<middlewares>/verifyUser';
 import { validateCreateArticle } from '<validations>/article';
 
 const article = express.Router();
 
-article.post('/', validateCreateArticle, verifyUser, articles);
+article.post('/', validateCreateArticle, verifyUser, checkIsVerified, createArticle);
+article.get('/', getArticles);
 
 export default article;

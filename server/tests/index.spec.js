@@ -1,5 +1,4 @@
 import './miscellaneous/miscellaneous.spec';
-import './controller/profile.spec';
 import './helpers/utils.spec';
 import './models/user.spec';
 import './models/category.spec';
@@ -9,6 +8,7 @@ import './models/tagArticle.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/socialAuth.spec';
+import './controller/profile.spec';
 import './controller/article.spec';
 import './middlewares/signUpValidation.spec';
 import './middlewares/loginValidation.spec';

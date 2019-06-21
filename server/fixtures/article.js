@@ -11,7 +11,7 @@ export const newArticle = {
   isBlacklisted: false,
   slug: slugTitle,
   categoryId: '325163a1-6e8c-4cd8-b5d3-7019c49983f5',
-  isPublished: true
+  isPublished: false
 };
 
 export const emptyArticleData = {};

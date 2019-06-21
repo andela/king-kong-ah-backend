@@ -1,4 +1,3 @@
-
 const res = {
   cookie: (accessToken, tokenObj, options) => {
     res.accessToken = accessToken;
