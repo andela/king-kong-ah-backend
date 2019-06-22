@@ -103,6 +103,12 @@ const article = (sequelize, DataTypes) => {
       target: 'id',
       onDelete: 'CASCADE'
     });
+
+    Article.hasMany(models.Rating, {
+      foreignKey: 'articleId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
   };
   return Article;
 };

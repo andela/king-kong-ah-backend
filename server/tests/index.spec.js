@@ -6,6 +6,7 @@ import './models/tag.spec';
 import './models/tagArticle.spec';
 import './models/comment.spec';
 import './models/user.spec';
+import './models/rating.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/profile.spec';
