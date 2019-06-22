@@ -19,4 +19,15 @@ describe('Routes', () => {
         done();
       });
   });
+
+  it('should return 200', (done) => {
+    chai
+      .request(app)
+      .get('/')
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
 });
