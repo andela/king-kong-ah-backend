@@ -8,6 +8,7 @@ import './models/comment.spec';
 import './models/user.spec';
 import './models/rating.spec';
 import './models/readingStats.spec';
+import './models/userFollower.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/profile.spec';

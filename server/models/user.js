@@ -89,7 +89,6 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
-    // associations between user and article
     User.hasMany(models.Article, {
       foreignKey: 'userId',
       target: 'id',
@@ -106,6 +105,13 @@ const user = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       target: 'id',
       onDelete: 'CASCADE'
+    });
+
+    User.belongsToMany(models.User, {
+      foreignKey: 'userId',
+      otherKey: 'followerId',
+      through: 'UserFollower',
+      as: 'followers'
     });
 
     User.belongsToMany(models.Article, {
