@@ -96,7 +96,17 @@ const article = (sequelize, DataTypes) => {
     });
 
     Article.belongsToMany(models.User, {
-      through: 'ReadingStats'
+      through: 'ReadingStats',
+      foreignKey: 'articleId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
+
+    Article.belongsToMany(models.User, {
+      through: 'Bookmark',
+      foreignKey: 'articleId',
+      target: 'id',
+      onDelete: 'CASCADE'
     });
 
     Article.belongsToMany(models.Tag, {
