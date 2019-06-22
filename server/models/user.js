@@ -101,6 +101,12 @@ const user = (sequelize, DataTypes) => {
       target: 'id',
       onDelete: 'CASCADE'
     });
+
+    User.hasMany(models.Rating, {
+      foreignKey: 'userId',
+      target: 'id',
+      onDelete: 'CASCADE'
+    });
   };
 
   return User;
