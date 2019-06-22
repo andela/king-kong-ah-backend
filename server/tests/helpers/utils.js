@@ -4,10 +4,7 @@ import { getUserData } from '<fixtures>/user';
 import { tokenGenerator } from '<helpers>/utils';
 
 const {
-  Category,
-  User,
-  Tag,
-  Article
+  Category, User, Tag, Article
 } = models;
 
 const { TOKEN_EXPIRY_DATE, SECRET } = process.env;
