@@ -11,11 +11,11 @@ const { TOKEN_EXPIRY_DATE, SECRET } = process.env;
 
 export const signupUser = (agent, data) => {
   data = data || {
-    email: 'johndoe@email.com', username: 'johndoee', password: '123456abcdef'
+    email: 'johndoe@email.com',
+    username: 'johndoee',
+    password: '123456abcdef'
   };
-  return agent
-    .post('/api/v1/auth/signup')
-    .send(getUserData(data));
+  return agent.post('/api/v1/auth/signup').send(getUserData(data));
 };
 
 export const loginUser = (agent, data) => {
@@ -23,9 +23,7 @@ export const loginUser = (agent, data) => {
     email: 'johndoe@email.com',
     password: '123456abcdef'
   };
-  return agent
-    .post('/api/v1/auth/login')
-    .send(data);
+  return agent.post('/api/v1/auth/login').send(data);
 };
 
 export const verifyUser = async (agent, data) => {
@@ -42,7 +40,7 @@ export const getCategoryId = async (values) => {
       where: { name: values },
       defaults: {
         name: values
-      },
+      }
     });
     const { id } = category;
     return id;
@@ -53,9 +51,12 @@ export const getCategoryId = async (values) => {
 
 export const getUserId = async (email, username) => {
   try {
-    const user = await User.create(getUserData({
-      email, username
-    }));
+    const user = await User.create(
+      getUserData({
+        email,
+        username
+      })
+    );
     const { id } = user;
     return id;
   } catch (error) {
@@ -69,7 +70,7 @@ export const getTagId = async (values) => {
       where: { name: values },
       defaults: {
         name: values
-      },
+      }
     });
     const { id } = tag;
     return id;
@@ -77,7 +78,6 @@ export const getTagId = async (values) => {
     console.log(error);
   }
 };
-
 
 export const getArticleId = async (title, body, userId) => {
   try {

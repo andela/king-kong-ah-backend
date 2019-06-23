@@ -1,12 +1,10 @@
 import models from '<serverModels>';
-import { displayError, handleSuccessResponse } from '../helpers/utils';
+import { displayError, handleResponse } from '../helpers/utils';
 
 const { Article } = models;
 
 export const createArticle = async (req, res) => {
-  const { title, body } = req.body;
-
-  const { categoryId } = req.body;
+  const { title, body, categoryId } = req.body;
 
   const { userId } = req;
 
@@ -18,10 +16,15 @@ export const createArticle = async (req, res) => {
       categoryId
     });
 
-    return handleSuccessResponse(newArticle, 'Article created successfully', res, 201);
+    return handleResponse(
+      newArticle,
+      'Article created successfully',
+      res,
+      'success',
+      201
+    );
   } catch (error) {
-    const err = new Error('Server error');
-    return displayError(err, res, 500);
+    return displayError(error, res, 500);
   }
 };
 
@@ -32,12 +35,47 @@ export const getArticles = async (req, res) => {
     });
 
     if (!articles.length) {
-      handleSuccessResponse(null, 'No article published at the moment', res, 200);
+      handleResponse(
+        null,
+        'No article published at the moment',
+        res,
+        'failed',
+        404
+      );
     } else {
-      handleSuccessResponse(articles, 'Article retrieved successfully', res, 200);
+      handleResponse(
+        articles,
+        'Article retrieved successfully',
+        res,
+        'success',
+        200
+      );
     }
   } catch (error) {
-    const err = new Error('Server error');
-    displayError(err, res, 500);
+    displayError(error, res, 500);
+  }
+};
+
+export const getArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const article = await Article.findOne({
+      where: { id }
+    });
+
+    if (!article) {
+      handleResponse(null, 'No article with this id found', res, 'failed', 404);
+    } else {
+      handleResponse(
+        article,
+        'Article retrieved successfully',
+        res,
+        'success',
+        200
+      );
+    }
+  } catch (error) {
+    displayError(error, res, 500);
   }
 };

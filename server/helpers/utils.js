@@ -163,3 +163,11 @@ export const handleSuccessResponse = (data, message, res, status = 200) => (
     data
   })
 );
+
+export const handleResponse = (data, message, res, status, statusCode) => (
+  res.status(statusCode).json({
+    status,
+    message,
+    data
+  })
+);
