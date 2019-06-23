@@ -2,7 +2,8 @@
 import models from '<serverModels>';
 import { newArticle, getArticleData } from '<fixtures>/article';
 import { createEllipsis } from '<helpers>/utils';
-import { getUserId, getCategoryId } from '<test>/helpers/utils';
+import { getModelObjectId } from '<test>/helpers/utils';
+import { getUserData } from '<fixtures>/user';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiAsPromise from 'chai-as-promised';
@@ -13,7 +14,12 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-const { Article, sequelize } = models;
+const {
+  Article,
+  sequelize,
+  User,
+  Category,
+} = models;
 
 let article;
 let articleData;
@@ -28,8 +34,8 @@ before(async () => {
 
 describe('Article Model', async () => {
   before(async () => {
-    const newUserId = await getUserId('johnndoeh1@email.com', 'johnndoeeh2');
-    const newCategoryId = await getCategoryId('technology');
+    const newUserId = await getModelObjectId(User, getUserData({ email: 'johnndoeh1@email.com', username: 'johnndoeeh2' }));
+    const newCategoryId = await getModelObjectId(Category, { name: 'technology' });
     articleData = getArticleData(newArticle, { userId: newUserId, categoryId: newCategoryId });
   });
 

@@ -1,17 +1,26 @@
 /* eslint-disable no-console */
 import chai from 'chai';
 import models from '<serverModels>';
-import { getUserId, getArticleId } from '<test>/helpers/utils';
+import { getModelObjectId } from '<test>/helpers/utils';
+import { getUserData } from '<fixtures>/user';
+
 
 const { expect } = chai;
 
-const { Rating, Article, sequelize } = models;
+const {
+  Rating,
+  Article,
+  sequelize,
+  User,
+  Category,
+} = models;
 
 let userId;
 let articleId;
 let rating;
 let newRating;
 let nullRating;
+let categoryId;
 
 before(async () => {
   try {
@@ -24,8 +33,14 @@ before(async () => {
 describe('Rating Model', () => {
   it('should rate an article', async () => {
     try {
-      userId = await getUserId('Racheback@gmail.com', 'Racheback345');
-      articleId = await getArticleId('Sample Title', 'This is a sample article body', userId);
+      categoryId = await getModelObjectId(Category, { name: 'technology' });
+      userId = await getModelObjectId(User, getUserData({ email: 'rRacheback@gmail.com', username: 'Racheback345' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Sample Title',
+        body: 'This is a sample article body',
+        userId,
+        categoryId
+      });
 
       rating = 4;
 
@@ -45,12 +60,13 @@ describe('Rating Model', () => {
 
   it('should delete a rating when an Article associated with it is deleted', async () => {
     try {
-      userId = await getUserId('batccdwhs@gmail.com', 'batccdwhs432');
-      articleId = await getArticleId(
-        'Article to delete Title',
-        'This is the body of an article to be deleted',
-        userId
-      );
+      userId = await getModelObjectId(User, getUserData({ email: 'batccdwhs@gmail.com', username: 'batccdwhs432' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Article to delete Title',
+        body: 'This is the body of an article to be deleted',
+        userId,
+        categoryId
+      });
 
       rating = 4;
 
@@ -70,12 +86,13 @@ describe('Rating Model', () => {
 
   it('should return error if rating is less than one', async () => {
     try {
-      userId = await getUserId('Spiderfo@gmail.com', 'Spiderforet');
-      articleId = await getArticleId(
-        'Article Title for error rating',
-        'This is the body of an Article for an error rating',
-        userId
-      );
+      userId = await getModelObjectId(User, getUserData({ email: 'Spiderfo@gmail.com', username: 'Spiderforet' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Article Title for error rating',
+        body: 'This is the body of an Article for an error rating',
+        userId,
+        categoryId
+      });
 
       rating = -2;
 
@@ -93,12 +110,13 @@ describe('Rating Model', () => {
 
   it('should return error if rating is more than five', async () => {
     try {
-      userId = await getUserId('RAvefater@gmail.com', 'RAvefater432');
-      articleId = await getArticleId(
-        'Article Title for error rating',
-        'This is the body of an Article for an error rating',
-        userId
-      );
+      userId = await getModelObjectId(User, getUserData({ email: 'RAvefater@gmail.com', username: 'RAvefater432' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Article Title for error rating',
+        body: 'This is the body of an Article for an error rating',
+        userId,
+        categoryId
+      });
 
       rating = 6;
 

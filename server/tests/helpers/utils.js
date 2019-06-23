@@ -1,11 +1,6 @@
 /* eslint-disable no-console */
-import models from '<server>/models';
 import { getUserData } from '<fixtures>/user';
 import { tokenGenerator } from '<helpers>/utils';
-
-const {
-  Category, User, Tag, Article
-} = models;
 
 const { TOKEN_EXPIRY_DATE, SECRET } = process.env;
 
@@ -34,61 +29,12 @@ export const verifyUser = async (agent, data) => {
   return loginUser(agent, data);
 };
 
-export const getCategoryId = async (values) => {
+export const getModelObjectId = async (model, obj) => {
   try {
-    const [category] = await Category.findOrCreate({
-      where: { name: values },
-      defaults: {
-        name: values
-      }
+    const [modelObject] = await model.findOrCreate({
+      where: obj
     });
-    const { id } = category;
-    return id;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getUserId = async (email, username) => {
-  try {
-    const user = await User.create(
-      getUserData({
-        email,
-        username
-      })
-    );
-    const { id } = user;
-    return id;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getTagId = async (values) => {
-  try {
-    const [tag] = await Tag.findOrCreate({
-      where: { name: values },
-      defaults: {
-        name: values
-      }
-    });
-    const { id } = tag;
-    return id;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getArticleId = async (title, body, userId) => {
-  try {
-    const categoryId = await getCategoryId('technology');
-    const newArticle = await Article.create({
-      title,
-      body,
-      userId,
-      categoryId
-    });
-    const { id } = newArticle;
+    const { id } = modelObject;
     return id;
   } catch (error) {
     console.log(error);

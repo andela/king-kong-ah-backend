@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import chai from 'chai';
 import models from '<serverModels>';
-import { getUserId } from '<test>/helpers/utils';
-
+import { getModelObjectId } from '<test>/helpers/utils';
+import { getUserData } from '<fixtures>/user';
 
 const { expect } = chai;
 const { User, sequelize } = models;
@@ -28,8 +28,8 @@ describe('User Follower relationship', () => {
 
   it('should follow a user', async () => {
     try {
-      userId = await getUserId('usermain@user.com', 'usermain');
-      followerId = await getUserId('followeremail@gmail.com', 'fellowfollower');
+      userId = await getModelObjectId(User, getUserData({ email: 'usermain@user.com', username: 'usermain' }));
+      followerId = await getModelObjectId(User, getUserData({ email: 'followeremail@gmail.com', username: 'fellowfollower' }));
       user = await User.findByPk(userId);
       userFollower = await user.addFollowers(followerId);
     } catch (error) {
@@ -42,7 +42,7 @@ describe('User Follower relationship', () => {
 
   it('should return followers', async () => {
     try {
-      followerId2 = await getUserId('followeremail2@gmail.com', 'fellowfollower2');
+      followerId2 = await getModelObjectId(User, getUserData({ email: 'followeremail2@gmail.com', username: 'fellowfollower2' }));
       await user.addFollowers(followerId2);
       const followers = await user.getFollowers();
       followersId = followers.map(getFollowers => getFollowers.dataValues.id);
@@ -56,7 +56,7 @@ describe('User Follower relationship', () => {
 
   it('should not follow user more than once', async () => {
     try {
-      followerId3 = await getUserId('followeremail3@gmail.com', 'fellowfollower3');
+      followerId3 = await getModelObjectId(User, getUserData({ email: 'followeremail3@gmail.com', username: 'fellowfollower3' }));
       await user.addFollowers(followerId3);
       await user.addFollowers(followerId3);
       const followers = await user.getFollowers();

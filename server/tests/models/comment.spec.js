@@ -3,7 +3,9 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiAsPromise from 'chai-as-promised';
 import models from '<serverModels>';
-import { getUserId, getArticleId } from '<test>/helpers/utils';
+import { getModelObjectId } from '<test>/helpers/utils';
+import { getUserData } from '<fixtures>/user';
+
 
 chai.use(chaiAsPromise);
 
@@ -11,10 +13,17 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-const { Comment, Article, sequelize } = models;
+const {
+  Comment,
+  Article,
+  sequelize,
+  User,
+  Category,
+} = models;
 
 let userId;
 let articleId;
+let categoryId;
 let comment;
 let type;
 let newComment;
@@ -31,8 +40,14 @@ before(async () => {
 describe('Comment Model', async () => {
   it('should create a comment', async () => {
     try {
-      userId = await getUserId('johndoe@gmail.com', 'john1doe');
-      articleId = await getArticleId('Sample Title', 'This is a sample article body', userId);
+      categoryId = await getModelObjectId(Category, { name: 'technology' });
+      userId = await getModelObjectId(User, getUserData({ email: 'johndoe@gmail.com', username: 'john1doe' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Sample Title',
+        body: 'This is a sample article body',
+        userId,
+        categoryId
+      });
       comment = 'This is a sample comment';
       type = 'no idea';
 
@@ -53,12 +68,13 @@ describe('Comment Model', async () => {
 
   it('should delete a comment when the Article associated with it is deleted', async () => {
     try {
-      userId = await getUserId('Matthewx@gmail.com', 'Matthew5X');
-      articleId = await getArticleId(
-        'Article to delete Title',
-        'This is the body of an article to be deleted',
-        userId
-      );
+      userId = await getModelObjectId(User, getUserData({ email: 'Matthewx@gmail.com', username: 'Matthew5X' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Article to delete Title',
+        body: 'This is the body of an article to be deleted',
+        userId,
+        categoryId
+      });
       comment = 'I should be deleted when my Article is deleted';
       type = 'no idea';
 
@@ -79,12 +95,13 @@ describe('Comment Model', async () => {
 
   it('should return a validation error if an empty comment is inserted', async () => {
     try {
-      userId = await getUserId('Kylexy@gmail.com', 'kylexY3rt5');
-      articleId = await getArticleId(
-        'Article Title for blank comment',
-        'This is the body of an Article for a blank comment',
-        userId
-      );
+      userId = await getModelObjectId(User, getUserData({ email: 'Kylexy@gmail.com', username: 'kylexY3rt5' }));
+      articleId = await getModelObjectId(Article, {
+        title: 'Article Title for blank comment',
+        body: 'This is the body of an Article for a blank comment',
+        userId,
+        categoryId
+      });
 
       comment = '';
       type = '';
