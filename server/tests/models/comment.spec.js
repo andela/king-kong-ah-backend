@@ -16,6 +16,7 @@ const { Comment, Article, sequelize } = models;
 let userId;
 let articleId;
 let comment;
+let type;
 let newComment;
 let nullComment;
 
@@ -33,11 +34,13 @@ describe('Comment Model', async () => {
       userId = await getUserId('johndoe@gmail.com', 'john1doe');
       articleId = await getArticleId('Sample Title', 'This is a sample article body', userId);
       comment = 'This is a sample comment';
+      type = 'no idea';
 
       newComment = await Comment.create({
         comment,
         userId,
-        articleId
+        articleId,
+        type
       });
     } catch (error) {
       console.log(error);
@@ -57,11 +60,13 @@ describe('Comment Model', async () => {
         userId
       );
       comment = 'I should be deleted when my Article is deleted';
+      type = 'no idea';
 
       newComment = await Comment.create({
         comment,
         userId,
-        articleId
+        articleId,
+        type
       });
 
       await Article.destroy({ where: { id: articleId } });
@@ -82,11 +87,13 @@ describe('Comment Model', async () => {
       );
 
       comment = '';
+      type = '';
 
       await Comment.create({
         comment,
         userId,
-        articleId
+        articleId,
+        type
       });
     } catch (error) {
       expect(error.errors[0].type).to.be.equal('Validation error');

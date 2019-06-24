@@ -8,11 +8,7 @@ import models from '<server>/models';
 import { article, newArticle, getArticleData } from '<fixtures>/article';
 import { createArticle, getArticles } from '<controllers>/article';
 import {
-  getCategoryId,
-  signupUser,
-  loginUser,
-  verifyUser,
-  getUserId
+  getCategoryId, signupUser, loginUser, getUserId
 } from '<test>/helpers/utils';
 
 const { expect } = chai;
@@ -37,11 +33,20 @@ afterEach(() => sinon.restore());
 
 const agent = chai.request.agent(app);
 
-describe('Create an Article', async () => {
+describe('Create an Article', () => {
   before(async () => {
-    await signupUser(agent);
-    await loginUser(agent);
-    article.categoryId = categoryId;
+    const data = {
+      email: 'victor@email.com',
+      username: 'victorvic',
+      password: '123456abcdef'
+    };
+    try {
+      await signupUser(agent, data);
+      await loginUser(agent, data);
+      article.categoryId = categoryId;
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   it('should not create an article if user is not verified', (done) => {
@@ -54,7 +59,8 @@ describe('Create an Article', async () => {
           .to.have.property('message')
           .equal('Kindly go to your email to verify your account');
         done();
-      }).catch((err) => {
+      })
+      .catch((err) => {
         done(err);
       });
   });
@@ -83,7 +89,8 @@ describe('Get articles', () => {
           .to.have.property('message')
           .equal('No article published at the moment');
         done();
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
       });
   });
@@ -92,7 +99,9 @@ describe('Get articles', () => {
     const newUserId = await getUserId('johnson@email.com', 'johnson');
     const newCategoryId = await getCategoryId('fashion');
     const articleData = getArticleData(newArticle, {
-      userId: newUserId, categoryId: newCategoryId, isPublished: true
+      userId: newUserId,
+      categoryId: newCategoryId,
+      isPublished: true
     });
     await Article.create(articleData);
     agent
@@ -109,10 +118,7 @@ describe('Get articles', () => {
   });
 
   it('should create a new article if user is verified', (done) => {
-    const data = {
-      email: 'victor@email.com', username: 'victorvic', password: '123456abcdef'
-    };
-    verifyUser(agent, data)
+    loginUser(agent)
       .then(() => {
         agent
           .post('/api/v1/articles')

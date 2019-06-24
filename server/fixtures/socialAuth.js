@@ -1,5 +1,5 @@
 import { newUser } from '<fixtures>/user';
-import utilRes from './utils';
+import { res as utilRes } from './utils';
 
 export const getReq = () => ({
   user: {

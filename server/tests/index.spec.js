@@ -12,6 +12,7 @@ import './models/userFollower.spec';
 import './controller/signup.spec';
 import './controller/login.spec';
 import './controller/profile.spec';
+import './controller/comment.spec';
 import './controller/socialAuth.spec';
 import './controller/article.spec';
 import './controller/recoverEmail.spec';
