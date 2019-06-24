@@ -23,21 +23,21 @@ before(async () => {
   }
 });
 
-describe('Reading stats relationship', () => {
+describe('Bookmark relationship', () => {
   before(async () => {
     try {
       newUser = await User.create(getUserData({
-        email: 'abdc@gf.com', username: 'alphabet'
+        email: 'abdc@gfhlo.com', username: 'alphabetnum'
       }));
 
-      const category = await Category.create({ name: 'code' });
+      const category = await Category.create({ name: 'nature' });
 
       newArticle = await Article.create(getArticleData(
         article,
         {
           userId: newUser.id,
           categoryId: category.id,
-          title: 'Hello kingkong dev oo'
+          title: 'Hello kingkong mama'
         }
       ));
     } catch (error) {
@@ -45,35 +45,35 @@ describe('Reading stats relationship', () => {
     }
   });
 
-  it('should read an article', async () => {
-    let read;
+  it('should bookmark an article', async () => {
+    let bookmark;
 
     try {
-      read = await newUser.addRead(newArticle.dataValues.id);
+      bookmark = await newUser.addBookmark(newArticle.dataValues.id);
     } catch (error) {
       console.log(error);
     }
 
-    const readArticleId = read[0].dataValues.ArticleId;
-    const readUserId = read[0].dataValues.userId;
+    const bookmarkedArticleId = bookmark[0].dataValues.articleId;
+    const bookmarkedUserId = bookmark[0].dataValues.userId;
 
-    expect(newUser.id).to.be.equal(readUserId);
-    expect(newArticle.id).to.be.equal(readArticleId);
+    expect(newUser.id).to.be.equal(bookmarkedUserId);
+    expect(newArticle.id).to.be.equal(bookmarkedArticleId);
   });
 
-  it('should not read article more than once', async () => {
-    let read;
+  it('should not bookmark an article more than once', async () => {
+    let bookmark;
 
     try {
-      await newUser.addRead(newArticle.dataValues.id);
-      read = await newUser.getRead();
+      await newUser.addBookmark(newArticle.dataValues.id);
+      bookmark = await newUser.getBookmark();
     } catch (error) {
       console.log(error);
     }
 
-    const returnedArticle = read[0].dataValues;
+    const returnedArticle = bookmark[0].dataValues;
 
-    expect(read.length).to.be.equal(1);
+    expect(bookmark.length).to.be.equal(1);
     expect(returnedArticle.id).to.be.equal(newArticle.id);
   });
 });

@@ -116,7 +116,18 @@ const user = (sequelize, DataTypes) => {
 
     User.belongsToMany(models.Article, {
       through: 'ReadingStats',
-      as: 'Read'
+      foreignKey: 'userId',
+      target: 'id',
+      as: 'Read',
+      onDelete: 'CASCADE'
+    });
+
+    User.belongsToMany(models.Article, {
+      through: 'Bookmark',
+      foreignKey: 'userId',
+      target: 'id',
+      as: 'bookmark',
+      onDelete: 'CASCADE'
     });
   };
   return User;
