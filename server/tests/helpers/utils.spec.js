@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { newArticle } from '<fixtures>/article';
-import res from '<fixtures>/utils';
+import { res } from '<fixtures>/utils';
 import {
   hashPassword, tokenGenerator, createEllipsis, cookieGenerator
 } from '<helpers>/utils';

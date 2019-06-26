@@ -19,6 +19,10 @@ const comment = (sequelize, DataTypes) => {
           msg: 'Comment should not be empty'
         }
       }
+    },
+    type: {
+      type: DataTypes.TEXT,
+      allowNull: false
     }
   });
   Comment.associate = (models) => {
