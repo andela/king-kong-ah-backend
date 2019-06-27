@@ -6,9 +6,13 @@ import sinonChai from 'sinon-chai';
 import app from '<server>/app';
 import models from '<server>/models';
 import { article, newArticle, getArticleData } from '<fixtures>/article';
-import { createArticle, getArticles } from '<controllers>/article';
+import { createArticle, getArticles, getArticle } from '<controllers>/article';
 import {
-  getCategoryId, signupUser, loginUser, getUserId
+  getCategoryId,
+  signupUser,
+  loginUser,
+  getUserId,
+  verifyUser
 } from '<test>/helpers/utils';
 
 const { expect } = chai;
@@ -19,6 +23,7 @@ chai.use(sinonChai);
 const { Article, sequelize } = models;
 
 let categoryId;
+let articleId;
 
 before(async () => {
   try {
@@ -66,16 +71,23 @@ describe('Create an Article', () => {
   });
 
   it('should return server error for create article', async () => {
-    const req = { body: {}, user: { userId: 'f1e2e1c8-6a90-4bcd-b349-49f989d311d6' } };
-    const res = {
-      status() {},
-      json() {}
-    };
+    try {
+      const req = {
+        body: {},
+        user: { userId: 'f1e2e1c8-6a90-4bcd-b349-49f989d311d6' }
+      };
+      const res = {
+        status() {},
+        json() {}
+      };
 
-    sinon.stub(res, 'status').returnsThis();
-    sinon.stub(Article, 'create').throws();
-    await createArticle(req, res);
-    expect(res.status).to.have.been.calledWith(500);
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'create').throws();
+      await createArticle(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
 
@@ -84,7 +96,7 @@ describe('Get articles', () => {
     agent
       .get('/api/v1/articles')
       .then((res) => {
-        expect(res.status).to.be.equal(200);
+        expect(res.status).to.be.equal(404);
         expect(res.body)
           .to.have.property('message')
           .equal('No article published at the moment');
@@ -96,34 +108,38 @@ describe('Get articles', () => {
   });
 
   it('should get all articles', async () => {
-    const newUserId = await getUserId('johnson@email.com', 'johnson');
-    const newCategoryId = await getCategoryId('fashion');
-    const articleData = getArticleData(newArticle, {
-      userId: newUserId,
-      categoryId: newCategoryId,
-      isPublished: true
-    });
-    await Article.create(articleData);
-    agent
-      .get('/api/v1/articles')
-      .then((res) => {
-        expect(res.status).to.be.equal(200);
-        expect(res.body)
-          .to.have.property('message')
-          .equal('Article retrieved successfully');
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const newUserId = await getUserId('daniel@email.com', 'daniela');
+      const newCategoryId = await getCategoryId('fashion');
+      const articleData = getArticleData(newArticle, {
+        userId: newUserId,
+        categoryId: newCategoryId,
+        isPublished: true
       });
+      await Article.create(articleData);
+      const res = await agent.get('/api/v1/articles');
+      expect(res.status).to.be.equal(200);
+      expect(res.body)
+        .to.have.property('message')
+        .equal('Article retrieved successfully');
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   it('should create a new article if user is verified', (done) => {
-    loginUser(agent)
+    const data = {
+      email: 'victory@email.com',
+      username: 'victorys',
+      password: '123456abcdef'
+    };
+    verifyUser(agent, data)
       .then(() => {
         agent
           .post('/api/v1/articles')
           .send(article)
           .end((err, res) => {
+            articleId = res.body.data.id;
             expect(res.status).to.be.equal(201);
             expect(res).to.have.status(201);
             expect(res.body)
@@ -137,16 +153,81 @@ describe('Get articles', () => {
       });
   });
 
-  it('should return server error get all articles', async () => {
-    const req = {};
-    const res = {
-      status() {},
-      json() {}
-    };
+  it('should return server error for get all articles', async () => {
+    try {
+      const req = {};
+      const res = {
+        status() {},
+        json() {}
+      };
 
-    sinon.stub(res, 'status').returnsThis();
-    sinon.stub(Article, 'findAll').throws();
-    await getArticles(req, res);
-    expect(res.status).to.have.been.calledWith(500);
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'findAll').throws();
+      await getArticles(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  it('should get a single article by Id', (done) => {
+    agent
+      .get(`/api/v1/articles/${articleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('Article retrieved successfully');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('should not get a single article by Id if Id can not be found', (done) => {
+    articleId = '6bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
+    agent
+      .get(`/api/v1/articles/${articleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('No article with this id found');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('should return 400 for invalid uuid param', (done) => {
+    articleId = '123456789';
+    agent
+      .get(`/api/v1/articles/${articleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('should return server error for get a single article', async () => {
+    try {
+      const req = {};
+      const res = {
+        status() {},
+        json() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'findAll').throws();
+      await getArticle(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
