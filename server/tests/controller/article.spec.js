@@ -6,9 +6,13 @@ import sinonChai from 'sinon-chai';
 import app from '<server>/app';
 import models from '<server>/models';
 import { article, newArticle, getArticleData } from '<fixtures>/article';
-import { createArticle, getArticles, getArticle } from '<controllers>/article';
 import { getUserData } from '<fixtures>/user';
-
+import {
+  createArticle,
+  getArticles,
+  getArticle,
+  updateArticle
+} from '<controllers>/article';
 import {
   getModelObjectId,
   signupUser,
@@ -22,14 +26,17 @@ chai.use(chaiHttp);
 chai.use(sinonChai);
 
 const {
-  Article,
-  sequelize,
-  Category,
-  User
+  Article, sequelize, Category, User
 } = models;
 
 let categoryId;
 let articleId;
+
+let data = {
+  email: 'victor@email.com',
+  username: 'victorvic',
+  password: '123456abcdef'
+};
 
 before(async () => {
   try {
@@ -46,11 +53,6 @@ const agent = chai.request.agent(app);
 
 describe('Create an Article', () => {
   before(async () => {
-    const data = {
-      email: 'victor@email.com',
-      username: 'victorvic',
-      password: '123456abcdef'
-    };
     try {
       await signupUser(agent, data);
       await loginUser(agent, data);
@@ -114,29 +116,32 @@ describe('Get articles', () => {
   });
 
   it('should get all articles', async () => {
-    const newUserId = await getModelObjectId(User, getUserData({ email: 'johnson@email.com', username: 'johnson' }));
-    const newCategoryId = await getModelObjectId(Category, { name: 'fashion' });
-    const articleData = getArticleData(newArticle, {
-      userId: newUserId,
-      categoryId: newCategoryId,
-      isPublished: true
-    });
-    await Article.create(articleData);
-    agent
-      .get('/api/v1/articles')
-      .then((res) => {
-        expect(res.status).to.be.equal(200);
-        expect(res.body)
-          .to.have.property('message')
-          .equal('Article retrieved successfully');
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const newUserId = await getModelObjectId(
+        User,
+        getUserData({ email: 'johnson@email.com', username: 'johnson' })
+      );
+      const newCategoryId = await getModelObjectId(Category, {
+        name: 'fashion'
       });
+      const articleData = getArticleData(newArticle, {
+        userId: newUserId,
+        categoryId: newCategoryId,
+        isPublished: true
+      });
+      await Article.create(articleData);
+      const res = await agent.get('/api/v1/articles');
+      expect(res.status).to.be.equal(200);
+      expect(res.body)
+        .to.have.property('message')
+        .equal('Article retrieved successfully');
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   it('should create a new article if user is verified', (done) => {
-    const data = {
+    data = {
       email: 'victory@email.com',
       username: 'victorys',
       password: '123456abcdef'
@@ -194,9 +199,9 @@ describe('Get articles', () => {
   });
 
   it('should not get a single article by Id if Id can not be found', (done) => {
-    articleId = '6bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
+    const invalidArticleId = '6bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
     agent
-      .get(`/api/v1/articles/${articleId}`)
+      .get(`/api/v1/articles/${invalidArticleId}`)
       .then((res) => {
         expect(res.status).to.be.equal(404);
         expect(res.body)
@@ -210,9 +215,9 @@ describe('Get articles', () => {
   });
 
   it('should return 400 for invalid uuid param', (done) => {
-    articleId = '123456789';
+    const invalidArticleId = '123456789';
     agent
-      .get(`/api/v1/articles/${articleId}`)
+      .get(`/api/v1/articles/${invalidArticleId}`)
       .then((res) => {
         expect(res.status).to.be.equal(400);
         done();
@@ -237,5 +242,75 @@ describe('Get articles', () => {
     } catch (error) {
       console.log(error);
     }
+  });
+});
+
+describe('Update article', () => {
+  it('should update an article that a user authored', (done) => {
+    agent
+      .patch(`/api/v1/articles/${articleId}`)
+      .send(
+        getArticleData({
+          title: 'New Article',
+          body: 'This is the new article'
+        })
+      )
+      .then((res) => {
+        expect(res.status).to.be.equal(200);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  it('should return 404 if article can not be found', (done) => {
+    const invalidArticleId = '7bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
+    agent
+      .patch(`/api/v1/articles/${invalidArticleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('No article with this id found');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('should return server error for update article', async () => {
+    try {
+      const req = {
+        body: {},
+        params: { id: '7bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba' }
+      };
+      const res = {
+        status() {},
+        json() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'findOne').returnsThis();
+      sinon.stub(Article, 'update').throws();
+      await updateArticle(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  it('should return 400 for invalid uuid param', (done) => {
+    const invalidArticleId = '123456789';
+    agent
+      .patch(`/api/v1/articles/${invalidArticleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
   });
 });

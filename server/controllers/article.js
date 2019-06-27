@@ -79,3 +79,32 @@ export const getArticle = async (req, res) => {
     displayError(error, res, 500);
   }
 };
+
+export const updateArticle = async (req, res) => {
+  const { userId } = req;
+  const { id } = req.params;
+
+  const { title, body } = req.body;
+  try {
+    const article = await Article.findOne({
+      where: { id, userId }
+    });
+    if (!article) {
+      handleResponse(null, 'No article with this id found', res, 'failed', 404);
+    } else {
+      const updatedArticle = await article.update({
+        title,
+        body
+      });
+      handleResponse(
+        updatedArticle,
+        'Article updated successfully',
+        res,
+        'success',
+        200
+      );
+    }
+  } catch (error) {
+    displayError(error, res, 500);
+  }
+};
