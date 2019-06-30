@@ -7,7 +7,7 @@
     "build-server": "babel server --out-dir dist",
     "build": "npm run clean && npm run build-server",
     "clean": "rm -rf dist && mkdir dist",
-    "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --timeout 50000 --exit",
+    "test": "NODE_ENV=test nyc mocha ./server/tests/index.spec.js --timeout 5000 --exit",
     "lint": "eslint '**/*js'",
     "lint:fix": "prettier-eslint --write '**/*js' ",
     "migration": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",

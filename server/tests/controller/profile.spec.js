@@ -5,8 +5,9 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '<server>/app';
 import models from '<server>/models';
-import { verifyUser } from '<test>/helpers/utils';
-import { update, getUserProfile } from '<controllers>/profile';
+import { verifyUser, getModelObjectId } from '<test>/helpers/utils';
+import { updateProfile, getUserProfile } from '<controllers>/profile';
+import { getUserData } from '<fixtures>/user';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -25,6 +26,14 @@ afterEach(() => sinon.restore());
 const agent = chai.request.agent(app);
 
 describe('Profile - controller', () => {
+  before(async () => {
+    try {
+      userId = await getModelObjectId(User, getUserData({ email: 'profiler@gmail.com', username: 'rating1234' }));
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
   it('should update a user profile', (done) => {
     verifyUser(agent).then(() => {
       agent
@@ -52,7 +61,7 @@ describe('Profile - controller', () => {
     };
     const stubStatus = sinon.stub(res, 'status').returnsThis();
     const stubUser = sinon.stub(User, 'findByPk').throws();
-    await update(req, res);
+    await updateProfile(req, res);
     expect(res.status).to.have.been.calledWith(500);
     stubStatus.restore();
     stubUser.restore();

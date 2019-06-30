@@ -2,11 +2,20 @@
 import chai from 'chai';
 import models from '<serverModels>';
 import { newArticle, getArticleData } from '<fixtures>/article';
-import { getUserId, getCategoryId, getTagId } from '<test>/helpers/utils';
+import {
+  getModelObjectId,
+} from '<test>/helpers/utils';
+import { getUserData } from '<fixtures>/user';
 
 
 const { expect } = chai;
-const { Article, sequelize } = models;
+const {
+  Article,
+  sequelize,
+  User,
+  Category,
+  Tag,
+} = models;
 
 let article;
 let articleData;
@@ -32,8 +41,8 @@ describe('Tag Article relationship', () => {
 
   before(async () => {
     try {
-      const newUserId = await getUserId('testarticle@email.com', 'testarticle2');
-      const newCategoryId = await getCategoryId('technology');
+      const newUserId = await getModelObjectId(User, getUserData({ email: 'testarticle@email.com', username: 'testarticle2' }));
+      const newCategoryId = await getModelObjectId(Category, { name: 'technology' });
       articleData = getArticleData(newArticle, { userId: newUserId, categoryId: newCategoryId });
       article = await Article.create(articleData);
     } catch (error) {
@@ -44,7 +53,7 @@ describe('Tag Article relationship', () => {
   it('should tag an article', async () => {
     try {
       articleId = article.id;
-      tagId = await getTagId('EPIC');
+      tagId = await getModelObjectId(Tag, { name: 'EPIC' });
       const tagArticles = await article.addTags(tagId);
       tagArticleId = tagArticles[0].dataValues.ArticleId;
       tagArticleTagId = tagArticles[0].dataValues.TagId;
@@ -64,7 +73,7 @@ describe('Tag Article relationship', () => {
       tagsId = [];
 
       const tagArticles = tags.map(async (tag) => {
-        tagId = await getTagId(tag);
+        tagId = await getModelObjectId(Tag, { name: tag });
         tagsId.push(tagId);
         await articles.addTags(tagId);
       });
@@ -91,7 +100,7 @@ describe('Tag Article relationship', () => {
       tagsId = [];
 
       const tagArticles = tags.map(async (tag) => {
-        tagId = await getTagId(tag);
+        tagId = await getModelObjectId(Tag, { name: tag });
         tagsId.push(tagId);
         await articles.addTags(tagId);
       });

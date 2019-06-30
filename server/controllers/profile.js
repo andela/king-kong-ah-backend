@@ -4,7 +4,7 @@ import { pickProfile, getProfile } from '<helpers>/profile';
 
 const { User } = models;
 
-export const update = async (req, res) => {
+export const updateProfile = async (req, res) => {
   const { userId } = req;
   const profileData = pickProfile(req.body);
   try {

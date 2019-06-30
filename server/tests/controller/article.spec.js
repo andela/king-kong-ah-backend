@@ -7,11 +7,12 @@ import app from '<server>/app';
 import models from '<server>/models';
 import { article, newArticle, getArticleData } from '<fixtures>/article';
 import { createArticle, getArticles, getArticle } from '<controllers>/article';
+import { getUserData } from '<fixtures>/user';
+
 import {
-  getCategoryId,
+  getModelObjectId,
   signupUser,
   loginUser,
-  getUserId,
   verifyUser
 } from '<test>/helpers/utils';
 
@@ -20,7 +21,12 @@ const { expect } = chai;
 chai.use(chaiHttp);
 chai.use(sinonChai);
 
-const { Article, sequelize } = models;
+const {
+  Article,
+  sequelize,
+  Category,
+  User
+} = models;
 
 let categoryId;
 let articleId;
@@ -28,7 +34,7 @@ let articleId;
 before(async () => {
   try {
     await sequelize.sync({ force: true });
-    categoryId = await getCategoryId('technology');
+    categoryId = await getModelObjectId(Category, { name: 'technology' });
   } catch (error) {
     console.log(error);
   }
@@ -108,23 +114,25 @@ describe('Get articles', () => {
   });
 
   it('should get all articles', async () => {
-    try {
-      const newUserId = await getUserId('daniel@email.com', 'daniela');
-      const newCategoryId = await getCategoryId('fashion');
-      const articleData = getArticleData(newArticle, {
-        userId: newUserId,
-        categoryId: newCategoryId,
-        isPublished: true
+    const newUserId = await getModelObjectId(User, getUserData({ email: 'johnson@email.com', username: 'johnson' }));
+    const newCategoryId = await getModelObjectId(Category, { name: 'fashion' });
+    const articleData = getArticleData(newArticle, {
+      userId: newUserId,
+      categoryId: newCategoryId,
+      isPublished: true
+    });
+    await Article.create(articleData);
+    agent
+      .get('/api/v1/articles')
+      .then((res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('Article retrieved successfully');
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      await Article.create(articleData);
-      const res = await agent.get('/api/v1/articles');
-      expect(res.status).to.be.equal(200);
-      expect(res.body)
-        .to.have.property('message')
-        .equal('Article retrieved successfully');
-    } catch (error) {
-      console.log(error);
-    }
   });
 
   it('should create a new article if user is verified', (done) => {

@@ -8,13 +8,15 @@ import createComment from '<controllers>/comment';
 import validateComment from '<validations>/comment';
 import { getUserData } from '<fixtures>/user';
 import {
-  getUserId, getArticleId, signupUser, loginUser, verifyUser
+  getModelObjectId, signupUser, loginUser, verifyUser
 } from '<test>/helpers/utils';
 import { req, res } from '<fixtures>/utils';
 
 const { expect } = chai;
 
-const { Comment } = models;
+const {
+  Comment, User, Category, Article
+} = models;
 
 let userId, articleId;
 
@@ -32,8 +34,14 @@ describe('Comments', () => {
     try {
       await signupUser(agent, data);
       await loginUser(agent, { email: 'johndoe89@email.com', password: '123456abcdef' });
-      userId = await getUserId('gbohunmi@gmail.com', 'gbohunmi');
-      articleId = await getArticleId('Sample Title', 'This is a sample article body', userId);
+      const categoryId = await getModelObjectId(Category, { name: 'Technology' });
+      userId = await getModelObjectId(User, getUserData({ email: 'gbohunmi@gmail.com', password: 'gbohunmi', username: 'etowersmember' }));
+      articleId = await getModelObjectId(Article, {
+        categoryId,
+        title: 'Sample Title',
+        body: 'This is a sample article body',
+        userId
+      });
     } catch (error) {
       console.log(error);
     }
