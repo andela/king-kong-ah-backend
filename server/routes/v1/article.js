@@ -1,4 +1,7 @@
 import express from 'express';
+import { verifyUser, checkIsVerified } from '<middlewares>/verifyUser';
+import { validateCreateArticle } from '<validations>/article';
+import validateUuidParams from '<validations>';
 import {
   createArticle,
   getArticles,
@@ -6,9 +9,7 @@ import {
   updateArticle,
   deleteArticle
 } from '<controllers>/article';
-import { verifyUser, checkIsVerified } from '<middlewares>/verifyUser';
-import { validateCreateArticle } from '<validations>/article';
-import validateUuidParams from '<validations>';
+
 
 const article = express.Router();
 

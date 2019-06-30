@@ -5,7 +5,11 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '<server>/app';
 import models from '<server>/models';
-import { article, newArticle, getArticleData } from '<fixtures>/article';
+import {
+  article,
+  newArticle,
+  getArticleData
+} from '<fixtures>/article';
 import { getUserData } from '<fixtures>/user';
 import {
   createArticle,
@@ -33,16 +37,23 @@ const {
 let categoryId;
 let articleId;
 
+
 let data = {
   email: 'victor@email.com',
   username: 'victorvic',
   password: '123456abcdef'
 };
 
+const agent = chai.request.agent(app);
+
 before(async () => {
   try {
     await sequelize.sync({ force: true });
     categoryId = await getModelObjectId(Category, { name: 'technology' });
+    await signupUser(agent, data);
+    await loginUser(agent, data);
+
+    article.categoryId = categoryId;
   } catch (error) {
     console.log(error);
   }
@@ -50,19 +61,8 @@ before(async () => {
 
 afterEach(() => sinon.restore());
 
-const agent = chai.request.agent(app);
 
 describe('Create an Article', () => {
-  before(async () => {
-    try {
-      await signupUser(agent, data);
-      await loginUser(agent, data);
-      article.categoryId = categoryId;
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   it('should not create an article if user is not verified', (done) => {
     agent
       .post('/api/v1/articles')
@@ -237,7 +237,7 @@ describe('Get articles', () => {
       };
 
       sinon.stub(res, 'status').returnsThis();
-      sinon.stub(Article, 'findAll').throws();
+      sinon.stub(Article, 'findOne').throws();
       await getArticle(req, res);
       expect(res.status).to.have.been.calledWith(500);
     } catch (error) {
@@ -315,6 +315,7 @@ describe('Update article', () => {
       });
   });
 });
+
 
 describe('Delete article', () => {
   it('should delete an article that a user authored', (done) => {
