@@ -3,7 +3,8 @@ import {
   createArticle,
   getArticles,
   getArticle,
-  updateArticle
+  updateArticle,
+  deleteArticle
 } from '<controllers>/article';
 import { verifyUser, checkIsVerified } from '<middlewares>/verifyUser';
 import { validateCreateArticle } from '<validations>/article';
@@ -21,5 +22,6 @@ article.post(
 article.get('/:id', validateUuidParams, getArticle);
 article.get('/', getArticles);
 article.patch('/:id', validateUuidParams, verifyUser, updateArticle);
+article.delete('/:id', validateUuidParams, verifyUser, deleteArticle);
 
 export default article;

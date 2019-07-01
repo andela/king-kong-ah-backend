@@ -108,3 +108,25 @@ export const updateArticle = async (req, res) => {
     displayError(error, res, 500);
   }
 };
+
+export const deleteArticle = async (req, res) => {
+  const { userId } = req;
+  const { id } = req.params;
+
+  try {
+    const article = await Article.findOne({
+      where: { id, userId }
+    });
+
+    if (!article) {
+      handleResponse(null, 'No article with this id found', res, 'failed', 404);
+    } else {
+      await Article.destroy({
+        where: { id, userId }
+      });
+      handleResponse(null, 'Article deleted successfully', res, 'success', 200);
+    }
+  } catch (error) {
+    displayError(error, res, 500);
+  }
+};
