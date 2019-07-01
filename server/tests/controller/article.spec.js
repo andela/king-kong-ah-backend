@@ -11,7 +11,8 @@ import {
   createArticle,
   getArticles,
   getArticle,
-  updateArticle
+  updateArticle,
+  deleteArticle
 } from '<controllers>/article';
 import {
   getModelObjectId,
@@ -305,6 +306,72 @@ describe('Update article', () => {
     const invalidArticleId = '123456789';
     agent
       .patch(`/api/v1/articles/${invalidArticleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+});
+
+describe('Delete article', () => {
+  it('should delete an article that a user authored', (done) => {
+    agent
+      .delete(`/api/v1/articles/${articleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('Article deleted successfully');
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  it('should return 404 if article can not be found', (done) => {
+    const invalidArticleId = '7bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
+    agent
+      .delete(`/api/v1/articles/${invalidArticleId}`)
+      .then((res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body)
+          .to.have.property('message')
+          .equal('No article with this id found');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('should return server error for delete article', async () => {
+    try {
+      const req = {
+        params: { id: '7bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba' }
+      };
+      const res = {
+        status() {},
+        json() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'findOne').returnsThis();
+      sinon.stub(Article, 'destroy').throws();
+      await deleteArticle(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  it('should return 400 for invalid uuid param', (done) => {
+    const invalidArticleId = '123456789';
+    agent
+      .delete(`/api/v1/articles/${invalidArticleId}`)
       .then((res) => {
         expect(res.status).to.be.equal(400);
         done();
