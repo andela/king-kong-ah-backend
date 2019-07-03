@@ -25,6 +25,13 @@ const Articles = {
       type: Sequelize.TEXT,
       allowNull: false
     },
+    readingTime: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     userId: {
       type: Sequelize.UUID,
       allowNull: false,

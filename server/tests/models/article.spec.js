@@ -2,6 +2,7 @@
 import models from '<serverModels>';
 import { newArticle, getArticleData } from '<fixtures>/article';
 import { createEllipsis } from '<helpers>/utils';
+import getReadingTime from '<helpers>/articleReadingTime';
 import { getModelObjectId } from '<test>/helpers/utils';
 import { getUserData } from '<fixtures>/user';
 import chai from 'chai';
@@ -46,7 +47,7 @@ describe('Article Model', async () => {
       console.log(error);
     }
     const {
-      title, body, description, userId, isBlacklisted, categoryId, isPublished
+      title, body, description, userId, isBlacklisted, categoryId, isPublished, readingTime
     } = article;
 
     expect(articleData.title).to.be.equal(title);
@@ -56,6 +57,7 @@ describe('Article Model', async () => {
     expect(articleData.categoryId).to.be.equal(categoryId);
     expect(articleData.isPublished).to.be.equal(isPublished);
     expect(description).to.be.equal(createEllipsis(body));
+    expect(readingTime).to.be.equal(getReadingTime(newArticle.title.concat(' ', newArticle.body)));
   });
 
   it('should delete an article', async () => {

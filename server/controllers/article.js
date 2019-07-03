@@ -1,7 +1,28 @@
 import models from '<serverModels>';
-import { displayError, handleResponse } from '../helpers/utils';
+import { displayError, handleResponse, createEllipsis } from '<helpers>/utils';
+import getReadingTime from '<helpers>/articleReadingTime';
 
 const { Article } = models;
+
+const findArticle = async (req, res) => {
+  try {
+    const { userId } = req;
+    const { id } = req.params;
+    let article;
+    if (userId) {
+      article = await Article.findOne({
+        where: { id, userId }
+      });
+    } else {
+      article = await Article.findOne({
+        where: { id }
+      });
+    }
+    return article;
+  } catch (error) {
+    displayError(error, res, 500);
+  }
+};
 
 export const createArticle = async (req, res) => {
   const { title, body, categoryId } = req.body;
@@ -24,7 +45,7 @@ export const createArticle = async (req, res) => {
       201
     );
   } catch (error) {
-    return displayError(error, res, 500);
+    displayError(error, res, 500);
   }
 };
 
@@ -58,11 +79,7 @@ export const getArticles = async (req, res) => {
 
 export const getArticle = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const article = await Article.findOne({
-      where: { id }
-    });
+    const article = await findArticle(req);
 
     if (!article) {
       handleResponse(null, 'No article with this id found', res, 'failed', 404);
@@ -81,20 +98,20 @@ export const getArticle = async (req, res) => {
 };
 
 export const updateArticle = async (req, res) => {
-  const { userId } = req;
-  const { id } = req.params;
-
   const { title, body } = req.body;
+
   try {
-    const article = await Article.findOne({
-      where: { id, userId }
-    });
+    const article = await findArticle(req, res);
     if (!article) {
       handleResponse(null, 'No article with this id found', res, 'failed', 404);
     } else {
+      const readingTime = getReadingTime(title.concat(' ', body));
+      const description = createEllipsis(body);
       const updatedArticle = await article.update({
         title,
-        body
+        body,
+        readingTime,
+        description
       });
       handleResponse(
         updatedArticle,
@@ -114,10 +131,7 @@ export const deleteArticle = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const article = await Article.findOne({
-      where: { id, userId }
-    });
-
+    const article = await findArticle(req, res);
     if (!article) {
       handleResponse(null, 'No article with this id found', res, 'failed', 404);
     } else {

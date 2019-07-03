@@ -1,4 +1,5 @@
 import { createUniqueSlug, createEllipsis } from '<helpers>/utils';
+import getReadingTime from '<helpers>/articleReadingTime';
 
 const article = (sequelize, DataTypes) => {
   const Article = sequelize.define(
@@ -36,6 +37,12 @@ const article = (sequelize, DataTypes) => {
       body: {
         type: DataTypes.TEXT,
         allowNull: false,
+        validate: {
+          notEmpty: true
+        }
+      },
+      readingTime: {
+        type: DataTypes.STRING,
         validate: {
           notEmpty: true
         }
@@ -78,6 +85,7 @@ const article = (sequelize, DataTypes) => {
   Article.beforeCreate((newArticle) => {
     newArticle.setDataValue('slug', createUniqueSlug(newArticle.title));
     newArticle.setDataValue('description', createEllipsis(newArticle.body));
+    newArticle.setDataValue('readingTime', getReadingTime(newArticle.title.concat(' ', newArticle.body)));
   });
 
 

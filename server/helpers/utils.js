@@ -164,6 +164,14 @@ export const handleSuccessResponse = (data, message, res, status = 200) => (
   })
 );
 
+/**
+ * @param {object} data
+ * @param {string} message
+ * @param {object} res
+ * @param {string} status
+ * @param {number} statusCode
+ * @return {object} response
+ */
 export const handleResponse = (data, message, res, status, statusCode) => (
   res.status(statusCode).json({
     status,

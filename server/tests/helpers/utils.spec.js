@@ -1,9 +1,14 @@
 /* eslint-disable no-console */
-import { newArticle } from '<fixtures>/article';
+import {
+  newArticle,
+  largeText,
+  aMinuteText
+} from '<fixtures>/article';
 import { res } from '<fixtures>/utils';
 import {
   hashPassword, tokenGenerator, createEllipsis, cookieGenerator
 } from '<helpers>/utils';
+import getReadingTime from '<helpers>/articleReadingTime';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 
@@ -57,5 +62,23 @@ describe('Cookie Generator', () => {
     cookieGenerator('5c1d4726-647e-4f77-a251-10381d3510f3', false, undefined, res);
 
     expect(res.token).to.be.a('string');
+  });
+});
+
+describe('Get article reading time', () => {
+  let readingTime;
+  it('should return 4 min reading time', () => {
+    readingTime = getReadingTime(largeText);
+    expect(readingTime).to.equal('4 minute read');
+  });
+
+  it('should return 1 min reading time', () => {
+    readingTime = getReadingTime(aMinuteText);
+    expect(readingTime).to.equal('1 minute read');
+  });
+
+  it('should return less than a minute reading time', () => {
+    readingTime = getReadingTime('This is a body');
+    expect(readingTime).to.equal('less than a minute read');
   });
 });
