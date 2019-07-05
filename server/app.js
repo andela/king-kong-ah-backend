@@ -3,12 +3,14 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import env from 'dotenv';
 import passport from 'passport';
+import cors from 'cors';
 import router from './routes';
 import setPassportMiddleware from '<middlewares>/passport/strategies';
 
 env.config();
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET));
