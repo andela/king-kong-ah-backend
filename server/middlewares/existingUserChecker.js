@@ -4,28 +4,22 @@ import model from '<serverModels>';
 const { User } = model;
 
 const validUserCheck = async (req, res, next) => {
-  const { email, username } = req.body;
-
+  const { email } = req.body;
   const formattedValues = toLowerCaseAndTrim(req.body);
 
   const userEmailExist = await User.findOne({ where: { email } });
 
-  const userNameExist = await User.findOne({ where: { username } });
-
   let message;
 
-  if (userEmailExist && userNameExist) {
-    message = 'Email and username exist';
-  } else if (userEmailExist) {
+  if (userEmailExist) {
     message = 'Email exist';
-  } else if (userNameExist) {
-    message = 'Username exist';
   }
   if (message) {
     const err = new Error(message);
     return displayError(err, res, 409);
   }
+
   req.formattedValues = formattedValues;
-  next();
+  return next();
 };
 export default validUserCheck;

@@ -8,13 +8,12 @@ const { User } = model;
 const signUp = async (req, res) => {
   const {
     formattedValues: {
-      email, username, firstName, lastName
+      email, firstName, lastName
     }
   } = req;
 
   const userData = {
     email,
-    username,
     lastName,
     firstName,
     isVerified: false,
@@ -23,7 +22,6 @@ const signUp = async (req, res) => {
 
   try {
     const newUser = await User.create(userData);
-
     cookieGenerator(newUser.id, newUser.isVerified, process.env.COOKIE_EXPIRY_DATE, res);
     const { password, ...userInfo } = newUser.dataValues;
     const verificationEmail = generateEmail(newUser, req);

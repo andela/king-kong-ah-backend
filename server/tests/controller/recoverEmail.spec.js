@@ -10,8 +10,8 @@ describe('Recover Email', () => {
       .post('/api/v1/auth/recoverEmail')
       .send({ email: '12' })
       .end((err, res) => {
-        expect(res.status).to.be.equal(404);
-        expect(res.body.message).to.equal('This email does not exist');
+        expect(res.status).to.be.equal(400);
+        expect(res.body.message).to.equal('The email format is invalid.');
         done(err);
       });
   });

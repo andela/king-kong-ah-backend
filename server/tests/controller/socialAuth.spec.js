@@ -23,33 +23,25 @@ beforeEach(() => {
 });
 
 describe('Oauth signup', () => {
-  it('should signup successfully', async () => {
-    try {
-      const response = await socialAuth(req, res);
-
-      expect(response.statusCode).to.be.equal(201);
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   it('should login successfully', async () => {
-    try {
-      const response = await socialAuth(req, res);
+    let response;
 
-      expect(response.statusCode).to.be.equal(200);
+    try {
+      response = await socialAuth(req, res);
     } catch (error) {
       console.log(error);
     }
+
+    expect(response.statusCode).to.be.equal(200);
   });
 
   it('should not signup successfully', async () => {
     try {
       await socialAuth({ user: { ...req.user, oauthId: '' } }, res);
-
-      expect(res.statusCode).to.be.equal(500);
     } catch (error) {
       console.log(error);
     }
+
+    expect(res.statusCode).to.be.equal(500);
   });
 });
