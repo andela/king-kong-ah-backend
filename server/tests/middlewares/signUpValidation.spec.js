@@ -71,17 +71,4 @@ describe('User signup validations', () => {
         done();
       });
   });
-
-  it('should return 400 if username is less than 6 characters', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/auth/signup')
-      .send(getUserData({ username: 'test' }))
-      .end((err, res) => {
-        expect(res.body.message.username)
-          .to.be.an('array')
-          .that.does.include('The username must be at least 6 characters.');
-        done();
-      });
-  });
 });

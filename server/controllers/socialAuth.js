@@ -10,19 +10,18 @@ import { cookieGenerator, displayError } from '<helpers>/utils';
 const socialAuth = async (req, res) => {
   const { User } = model;
   const { oauthId, type } = req.user;
+  const { FRONT_END_HOST } = process.env;
+
   try {
-    const [user, created] = await User.findOrCreate({
+    const [user] = await User.findOrCreate({
       where: { oauthId, type },
       defaults: req.user
     });
-    const { id, isVerified, firstName } = user.dataValues;
+
+    const { id, isVerified } = user.dataValues;
     cookieGenerator(id, isVerified, process.env.COOKIE_EXPIRY_DATE, res);
 
-    const status = created ? 201 : 200;
-    return res.status(status).json({
-      status: 'success',
-      user: `Welcome ${firstName}`
-    });
+    return res.redirect(200, `${FRONT_END_HOST}/api/v1/dashboard`);
   } catch (error) {
     displayError(error, res, 500);
   }

@@ -17,7 +17,7 @@ describe('Reset Password', () => {
       .patch(`/api/v1/auth/resetPassword?token=${token}`)
       .send({ password: 'abcfegt569', confirmPassword: 'abcfegt56' })
       .end((err, res) => {
-        expect(res.status).to.be.equal(403);
+        expect(res.status).to.be.equal(400);
         done(err);
       });
   });
@@ -43,7 +43,17 @@ describe('Reset Password', () => {
       .send({ password: 'abcfegt569', confirmPassword: 'abcfegt569' })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
-        expect(res.body.message).to.equal('Password reset successful');
+        done(err);
+      });
+  });
+
+  it('should not reset password with invalid link', (done) => {
+    chai
+      .request(app)
+      .patch('/api/v1/auth/resetPassword?token')
+      .send({ password: 'abcfegt569', confirmPassword: 'abcfegt569' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
         done(err);
       });
   });

@@ -52,36 +52,14 @@ describe('User signup', () => {
       });
   });
 
-  it('should not allow duplicate email and username', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/auth/signup')
-      .send(getUserData({ email: 'testing@authorshaven.com', username: 'testing' }))
-      .end((err, res) => {
-        expect(res.status).to.be.equal(409);
-        done();
-      });
-  });
-
   it('should not allow duplicate email', (done) => {
     chai
       .request(app)
       .post('/api/v1/auth/signup')
-      .send(getUserData({ email: 'testing@authorshaven.com', username: 'simi' }))
+      .send(getUserData({ email: 'testing@authorshaven.com' }))
       .end((err, res) => {
         expect(res.status).to.be.equal(409);
         expect(res.body.message).to.equal('Email exist');
-        done();
-      });
-  });
-
-  it('should not allow duplicate username', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/auth/signup')
-      .send(getUserData({ email: 'testero@authorshaven.com', username: 'testing' }))
-      .end((err, res) => {
-        expect(res.status).to.be.equal(409);
         done();
       });
   });

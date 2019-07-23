@@ -18,6 +18,7 @@ export const getRes = () => {
       res.statusCode = code;
       return res;
     },
+    redirect: code => res.status(code),
     json: (data) => {
       res.json = JSON.stringify(data);
       return res;

@@ -1,4 +1,4 @@
-import { tokenGenerator, getFullUrl, getBaseUrl } from '<helpers>/utils';
+import { tokenGenerator } from '<helpers>/utils';
 import { APP_NAME, getMailGenerator } from '<emails>/config';
 
 const emailTemplate = link => ({
@@ -17,11 +17,11 @@ const emailTemplate = link => ({
   }
 });
 
-const generateResetEmail = (email, req) => {
+const generateResetEmail = (email) => {
+  const { FRONT_END_HOST } = process.env;
   const token = tokenGenerator('', '', process.env.TOKEN_EXPIRY_DATE, process.env.SECRET, email);
-  const baseUrl = getBaseUrl(getFullUrl(req));
-  const mailGenerator = getMailGenerator(baseUrl);
-  const mail = emailTemplate(`${baseUrl}/resetPassword?token=${token}`);
+  const mailGenerator = getMailGenerator(FRONT_END_HOST);
+  const mail = emailTemplate(`${FRONT_END_HOST}/resetPassword?token=${token}`);
   const emailBody = mailGenerator.generate(mail);
   return emailBody;
 };

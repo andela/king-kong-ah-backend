@@ -132,18 +132,6 @@ export const validate = (data, rules, response, nextFunction) => {
 export const comparePassword = (hashPwd, password) => bcrypt.compareSync(password, hashPwd);
 
 /**
- * @param {object} req
- * @return {string} fullUrl
- */
-export const getFullUrl = req => `${req.protocol}://${req.get('host')}${req.originalUrl}`;
-
-/**
- * @param {string} fullUrl
- * @return {string} baseUrl
- */
-export const getBaseUrl = fullUrl => fullUrl.slice(0, fullUrl.lastIndexOf('/'));
-
-/**
  * @param {string} token
  * @return {object} decodeToken
  */
