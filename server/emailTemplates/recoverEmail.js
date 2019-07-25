@@ -21,7 +21,7 @@ const generateResetEmail = (email) => {
   const { FRONT_END_HOST } = process.env;
   const token = tokenGenerator('', '', process.env.TOKEN_EXPIRY_DATE, process.env.SECRET, email);
   const mailGenerator = getMailGenerator(FRONT_END_HOST);
-  const mail = emailTemplate(`${FRONT_END_HOST}/resetPassword?token=${token}`);
+  const mail = emailTemplate(`${FRONT_END_HOST}/reset-password?token=${token}`);
   const emailBody = mailGenerator.generate(mail);
   return emailBody;
 };

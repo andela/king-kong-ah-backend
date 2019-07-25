@@ -1,5 +1,7 @@
 import model from '<serverModels>';
-import { cookieGenerator, displayError, handleSuccessResponse } from '<helpers>/utils';
+import {
+  cookieGenerator, displayError, handleSuccessResponse, tokenGenerator,
+} from '<helpers>/utils';
 import generateEmail from '<emails>/verification';
 import sendMail from '<helpers>/emails';
 
@@ -33,7 +35,9 @@ const signUp = async (req, res) => {
       'Email Verification',
       verificationEmail
     );
-
+    userInfo['access-token'] = tokenGenerator(
+      newUser.id, newUser.isVerified, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET
+    );
     return handleSuccessResponse(userInfo, 'User created successfully', res, 201);
   } catch (error) {
     const err = new Error('Server error');

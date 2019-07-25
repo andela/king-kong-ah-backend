@@ -11,7 +11,8 @@ export const createArticle = async (req, res) => {
     title,
     body,
     categoryId,
-    articleImage
+    articleImage,
+    isPublished,
   } = req.body;
 
   const { userId } = req;
@@ -23,6 +24,7 @@ export const createArticle = async (req, res) => {
       userId,
       categoryId,
       articleImage,
+      isPublished,
     });
     return handleResponse(newArticle, 'Article created successfully', res, 'success', 201);
   } catch (error) {
