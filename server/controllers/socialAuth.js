@@ -19,9 +19,8 @@ const socialAuth = async (req, res) => {
     });
 
     const { id, isVerified } = user.dataValues;
-    cookieGenerator(id, isVerified, process.env.COOKIE_EXPIRY_DATE, res);
-
-    return res.redirect(200, `${FRONT_END_HOST}/api/v1/dashboard`);
+    cookieGenerator(id, isVerified, process.env.COOKIE_EXPIRY_DATE, res)
+      .redirect(301, `${FRONT_END_HOST}/dashboard`);
   } catch (error) {
     displayError(error, res, 500);
   }

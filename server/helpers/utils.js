@@ -59,7 +59,6 @@ export const cookieGenerator = (id, isVerified, cookieExpiryDate = 3.6e6, res) =
   'access-token',
   { token: tokenGenerator(id, isVerified, process.env.TOKEN_EXPIRY_DATE, process.env.SECRET) },
   {
-    httpOnly: true,
     secure: false,
     maxAge: cookieExpiryDate
   }

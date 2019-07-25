@@ -18,7 +18,7 @@ const resetPassword = async (req, res) => {
 
   await user.update({ password: newPassword });
 
-  res.redirect(200, `${FRONT_END_HOST}/api/v1/dashboard`);
+  res.redirect(301, `${FRONT_END_HOST}/dashboard`);
 };
 
 export default resetPassword;
