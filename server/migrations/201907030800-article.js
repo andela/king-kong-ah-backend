@@ -47,7 +47,12 @@ const Articles = {
     },
     categoryId: {
       type: Sequelize.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Categories',
+        key: 'id',
+        as: 'categoryId'
+      }
     },
     articleImage: {
       type: Sequelize.TEXT,

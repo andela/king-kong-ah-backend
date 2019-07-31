@@ -5,6 +5,7 @@ import validateUuidParams from '<validations>';
 import {
   createArticle,
   getArticles,
+  getArticlesByCategory,
   getArticle,
   updateArticle,
   deleteArticle
@@ -21,6 +22,7 @@ article.post(
   createArticle
 );
 article.get('/:id', validateUuidParams, getArticle);
+article.get('/:id/category', validateUuidParams, getArticlesByCategory);
 article.get('/', getArticles);
 article.patch('/:id', validateUuidParams, verifyUser, updateArticle);
 article.delete('/:id', validateUuidParams, verifyUser, deleteArticle);
