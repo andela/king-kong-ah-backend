@@ -16,7 +16,8 @@ import {
   getArticles,
   getArticle,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  getArticlesByCategory
 } from '<controllers>/article';
 import {
   getModelObjectId,
@@ -380,5 +381,74 @@ describe('Delete article', () => {
       .catch((err) => {
         done(err);
       });
+  });
+});
+
+describe('Get articles by category', () => {
+  it('should get all articles by category', async () => {
+    try {
+      const newUserId = await getModelObjectId(
+        User,
+        getUserData({ email: 'simi@email.com', username: 'simi' })
+      );
+      const newCategoryId = await getModelObjectId(Category, {
+        name: 'romance'
+      });
+      const articleData = getArticleData(newArticle, {
+        userId: newUserId,
+        categoryId: newCategoryId,
+        isPublished: true
+      });
+      await Article.create(articleData);
+      const res = await agent.get(`/api/v1/articles/${newCategoryId}/category`);
+      expect(res.status).to.be.equal(200);
+      expect(res.body)
+        .to.have.property('message')
+        .equal('Article retrieved successfully');
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  it('should not get all articles by category', async () => {
+    try {
+      const newUserId = await getModelObjectId(
+        User,
+        getUserData({ email: 'simisola@email.com', username: 'simisola' })
+      );
+      const newCategoryId = await getModelObjectId(Category, {
+        name: 'romance'
+      });
+      const articleData = getArticleData(newArticle, {
+        userId: newUserId,
+        categoryId: newCategoryId,
+        isPublished: true
+      });
+      await Article.create(articleData);
+      const res = await agent.get('/api/v1/articles/e0ce07aa-4e05-4078-8d51-f2a96689ff72/category');
+      expect(res.status).to.be.equal(404);
+      expect(res.body)
+        .to.have.property('message')
+        .equal('There are no articles in this category yet');
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  it('should return server error for get all articles by id', async () => {
+    try {
+      const req = { params: 'e0ce07aa-4e05-4078-8d51-f2a96689ff72' };
+      const res = {
+        status() {},
+        json() {}
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(Article, 'findAll').throws();
+      await getArticlesByCategory(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });

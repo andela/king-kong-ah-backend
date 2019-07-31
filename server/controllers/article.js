@@ -77,6 +77,35 @@ export const getArticles = async (req, res) => {
   }
 };
 
+export const getArticlesByCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const articles = await Article.findAll({
+      where: { categoryId: id, isPublished: true }
+    });
+
+    if (!articles.length) {
+      handleResponse(
+        null,
+        'There are no articles in this category yet',
+        res,
+        'failed',
+        404
+      );
+    } else {
+      handleResponse(
+        articles,
+        'Article retrieved successfully',
+        res,
+        'success',
+        200
+      );
+    }
+  } catch (error) {
+    displayError(error, res, 500);
+  }
+};
+
 export const getArticle = async (req, res) => {
   try {
     const article = await findArticle(req);
