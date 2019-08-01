@@ -200,6 +200,22 @@ describe('Get articles', () => {
       });
   });
 
+  it('should get a single article by Id', (done) => {
+    agent
+      .get(`/api/v1/articles/${articleId}`)
+      .then((res) => {
+        console.log(res.body.data);
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data)
+          .to.have.property('rating')
+          .equal(0);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
   it('should not get a single article by Id if Id can not be found', (done) => {
     const invalidArticleId = '6bc8c0fe-9e2a-4a6a-9e11-f6d85b5d8aba';
     agent

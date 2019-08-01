@@ -1,28 +1,10 @@
 import models from '<serverModels>';
 import { displayError, handleResponse, createEllipsis } from '<helpers>/utils';
 import getReadingTime from '<helpers>/articleReadingTime';
+import findArticle from '<helpers>/findExistingArticle';
+import getArticleRating from '<helpers>/getArticleRating';
 
 const { Article } = models;
-
-const findArticle = async (req, res) => {
-  try {
-    const { userId } = req;
-    const { id } = req.params;
-    let article;
-    if (userId) {
-      article = await Article.findOne({
-        where: { id, userId }
-      });
-    } else {
-      article = await Article.findOne({
-        where: { id }
-      });
-    }
-    return article;
-  } catch (error) {
-    displayError(error, res, 500);
-  }
-};
 
 export const createArticle = async (req, res) => {
   const { title, body, categoryId } = req.body;
@@ -113,6 +95,9 @@ export const getArticle = async (req, res) => {
     if (!article) {
       handleResponse(null, 'No article with this id found', res, 'failed', 404);
     } else {
+      const averageRating = await getArticleRating(article.id, res);
+      article.dataValues.rating = averageRating;
+
       handleResponse(
         article,
         'Article retrieved successfully',
