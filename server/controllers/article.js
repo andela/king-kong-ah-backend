@@ -4,7 +4,7 @@ import getReadingTime from '<helpers>/articleReadingTime';
 import findArticle from '<helpers>/findExistingArticle';
 import { getArticleRating, appendRating } from '<helpers>/getArticleRating';
 
-const { Article } = models;
+const { Article, User } = models;
 
 export const createArticle = async (req, res) => {
   const { title, body, categoryId } = req.body;
@@ -18,13 +18,7 @@ export const createArticle = async (req, res) => {
       userId,
       categoryId
     });
-    return handleResponse(
-      newArticle,
-      'Article created successfully',
-      res,
-      'success',
-      201
-    );
+    return handleResponse(newArticle, 'Article created successfully', res, 'success', 201);
   } catch (error) {
     displayError(error, res, 500);
   }
@@ -38,22 +32,10 @@ export const getArticles = async (req, res) => {
     });
 
     if (!articles.length) {
-      handleResponse(
-        null,
-        'No article published at the moment',
-        res,
-        'failed',
-        404
-      );
+      handleResponse(null, 'No article published at the moment', res, 'failed', 404);
     } else {
       const newArticles = await appendRating(articles);
-      handleResponse(
-        newArticles,
-        'Article retrieved successfully',
-        res,
-        'success',
-        200
-      );
+      handleResponse(newArticles, 'Article retrieved successfully', res, 'success', 200);
     }
   } catch (error) {
     displayError(error, res, 500);
@@ -64,26 +46,21 @@ export const getArticlesByCategory = async (req, res) => {
   const { id } = req.params;
   try {
     const articles = await Article.findAll({
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['firstName', 'lastName'],
+        }
+      ],
       where: { categoryId: id, isPublished: true }
     });
 
     if (!articles.length) {
-      handleResponse(
-        null,
-        'There are no articles in this category yet',
-        res,
-        'failed',
-        404
-      );
+      handleResponse(null, 'There are no articles in this category yet', res, 'failed', 404);
     } else {
       const newArticles = await appendRating(articles);
-      handleResponse(
-        newArticles,
-        'Article retrieved successfully',
-        res,
-        'success',
-        200
-      );
+      handleResponse(newArticles, 'Article retrieved successfully', res, 'success', 200);
     }
   } catch (error) {
     displayError(error, res, 500);
@@ -100,13 +77,7 @@ export const getArticle = async (req, res) => {
       const averageRating = await getArticleRating(article.id, res);
       article.dataValues.rating = averageRating;
 
-      handleResponse(
-        article,
-        'Article retrieved successfully',
-        res,
-        'success',
-        200
-      );
+      handleResponse(article, 'Article retrieved successfully', res, 'success', 200);
     }
   } catch (error) {
     displayError(error, res, 500);
@@ -129,13 +100,7 @@ export const updateArticle = async (req, res) => {
         readingTime,
         description
       });
-      handleResponse(
-        updatedArticle,
-        'Article updated successfully',
-        res,
-        'success',
-        200
-      );
+      handleResponse(updatedArticle, 'Article updated successfully', res, 'success', 200);
     }
   } catch (error) {
     displayError(error, res, 500);
