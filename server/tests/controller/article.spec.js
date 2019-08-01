@@ -420,6 +420,8 @@ describe('Get articles by category', () => {
       expect(res.body)
         .to.have.property('message')
         .equal('Article retrieved successfully');
+      expect(res.body.data[0].user).to.have.property('firstName', 'testing');
+      expect(res.body.data[0].user).to.have.property('lastName', 'testing');
     } catch (error) {
       console.log(error);
     }
