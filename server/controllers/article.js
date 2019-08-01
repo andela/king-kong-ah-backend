@@ -2,7 +2,7 @@ import models from '<serverModels>';
 import { displayError, handleResponse, createEllipsis } from '<helpers>/utils';
 import getReadingTime from '<helpers>/articleReadingTime';
 import findArticle from '<helpers>/findExistingArticle';
-import getArticleRating from '<helpers>/getArticleRating';
+import { getArticleRating, appendRating } from '<helpers>/getArticleRating';
 
 const { Article } = models;
 
@@ -18,7 +18,6 @@ export const createArticle = async (req, res) => {
       userId,
       categoryId
     });
-
     return handleResponse(
       newArticle,
       'Article created successfully',
@@ -32,8 +31,9 @@ export const createArticle = async (req, res) => {
 };
 
 export const getArticles = async (req, res) => {
+  let articles;
   try {
-    const articles = await Article.findAll({
+    articles = await Article.findAll({
       where: { isPublished: true }
     });
 
@@ -46,8 +46,9 @@ export const getArticles = async (req, res) => {
         404
       );
     } else {
+      const newArticles = await appendRating(articles);
       handleResponse(
-        articles,
+        newArticles,
         'Article retrieved successfully',
         res,
         'success',
@@ -75,8 +76,9 @@ export const getArticlesByCategory = async (req, res) => {
         404
       );
     } else {
+      const newArticles = await appendRating(articles);
       handleResponse(
-        articles,
+        newArticles,
         'Article retrieved successfully',
         res,
         'success',

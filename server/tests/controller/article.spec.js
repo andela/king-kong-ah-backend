@@ -204,7 +204,6 @@ describe('Get articles', () => {
     agent
       .get(`/api/v1/articles/${articleId}`)
       .then((res) => {
-        console.log(res.body.data);
         expect(res.status).to.be.equal(200);
         expect(res.body.data)
           .to.have.property('rating')
