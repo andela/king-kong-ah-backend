@@ -18,7 +18,11 @@ export const getRes = () => {
       res.statusCode = code;
       return res;
     },
-    redirect: code => res.status(code),
+    redirect: (code, link) => {
+      res.statusCode = code;
+      res.redirectTo = link;
+      return res;
+    },
     json: (data) => {
       res.json = JSON.stringify(data);
       return res;

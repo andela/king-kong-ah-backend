@@ -24,15 +24,12 @@ beforeEach(() => {
 
 describe('Oauth signup', () => {
   it('should login successfully', async () => {
-    let response;
-
     try {
-      response = await socialAuth(req, res);
+      await socialAuth(req, res);
     } catch (error) {
       console.log(error);
     }
-
-    expect(response.statusCode).to.be.equal(200);
+    expect(res.statusCode).to.be.equal(301);
   });
 
   it('should not signup successfully', async () => {

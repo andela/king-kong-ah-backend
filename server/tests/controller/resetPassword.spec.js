@@ -1,7 +1,9 @@
 import chai from 'chai';
 import { tokenGenerator } from '<helpers>/utils';
 import app from '<server>/app';
+import env from 'dotenv';
 
+env.config();
 const { expect } = chai;
 const token = tokenGenerator(
   'noid',
@@ -43,6 +45,7 @@ describe('Reset Password', () => {
       .send({ password: 'abcfegt569', confirmPassword: 'abcfegt569' })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
+        expect(res.body.message).to.be.equal('Password successfully changed');
         done(err);
       });
   });
