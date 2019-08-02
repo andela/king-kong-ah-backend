@@ -17,7 +17,8 @@ export const validateCreateArticle = (req, res, next) => {
   const createArticleRules = {
     title: 'required|string|max:100',
     body: 'required|string',
-    categoryId: ['required', uuidFormat]
+    categoryId: ['required', uuidFormat],
+    articleImage: 'url'
   };
   validate(data, createArticleRules, res, next);
 };
