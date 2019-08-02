@@ -7,7 +7,12 @@ import { getArticleRating, appendRating } from '<helpers>/getArticleRating';
 const { Article, User } = models;
 
 export const createArticle = async (req, res) => {
-  const { title, body, categoryId } = req.body;
+  const {
+    title,
+    body,
+    categoryId,
+    articleImage
+  } = req.body;
 
   const { userId } = req;
 
@@ -16,7 +21,8 @@ export const createArticle = async (req, res) => {
       title,
       body,
       userId,
-      categoryId
+      categoryId,
+      articleImage,
     });
     return handleResponse(newArticle, 'Article created successfully', res, 'success', 201);
   } catch (error) {

@@ -68,11 +68,6 @@ const article = (sequelize, DataTypes) => {
       articleImage: {
         type: DataTypes.TEXT,
         allowNull: true,
-        validate: {
-          isUrl: {
-            msg: 'Article image must be a url.'
-          }
-        }
       },
       isPublished: {
         type: DataTypes.BOOLEAN,
