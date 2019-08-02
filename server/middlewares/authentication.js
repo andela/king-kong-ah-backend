@@ -17,9 +17,19 @@ export const authentication = async (req, res, next) => {
     const err = new Error('User credentials are invalid');
     return displayError(err, res);
   }
+  const {
+    username, bio, profileImage, lastName, firstName
+  } = userData;
+
   req.user = {
     id: userData.id,
     isVerified: userData.isVerified,
+    username,
+    bio,
+    profileImage,
+    lastName,
+    firstName,
+    email
   };
   next();
 };

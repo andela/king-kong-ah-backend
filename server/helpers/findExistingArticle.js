@@ -1,7 +1,7 @@
 import models from '<serverModels>';
 import { displayError } from '<helpers>/utils';
 
-const { Article } = models;
+const { Article, User } = models;
 
 const findArticle = async (req, res) => {
   try {
@@ -10,10 +10,24 @@ const findArticle = async (req, res) => {
     let article;
     if (userId) {
       article = await Article.findOne({
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['firstName', 'lastName', 'profileImage'],
+          }
+        ],
         where: { id, userId }
       });
     } else {
       article = await Article.findOne({
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['firstName', 'lastName', 'profileImage'],
+          }
+        ],
         where: { id }
       });
     }
