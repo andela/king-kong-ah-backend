@@ -28,6 +28,13 @@ export const getArticles = async (req, res) => {
   let articles;
   try {
     articles = await Article.findAll({
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['firstName', 'lastName', 'profileImage'],
+        }
+      ],
       where: { isPublished: true }
     });
 
@@ -50,7 +57,7 @@ export const getArticlesByCategory = async (req, res) => {
         {
           model: User,
           as: 'user',
-          attributes: ['firstName', 'lastName'],
+          attributes: ['firstName', 'lastName', 'profileImage'],
         }
       ],
       where: { categoryId: id, isPublished: true }

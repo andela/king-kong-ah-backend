@@ -5,7 +5,7 @@ const login = async (req, res) => {
 
   cookieGenerator(id, isVerified, process.env.COOKIE_EXPIRY_DATE, res);
 
-  return handleSuccessResponse(null, 'Login successful', res, 200);
+  return handleSuccessResponse(req.user, 'Login successful', res, 200);
 };
 
 export default login;
