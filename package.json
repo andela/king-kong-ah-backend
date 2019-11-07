@@ -25,7 +25,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "^7.7.0",
-    "@babel/runtime": "^7.5.4",
+    "@babel/runtime": "^7.7.2",
     "@sendgrid/mail": "^6.4.0",
     "babel-plugin-istanbul": "^5.1.4",
     "babel-plugin-module-resolver": "^3.2.0",
