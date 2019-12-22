@@ -68,7 +68,7 @@
     "nyc": "^14.1.1",
     "prettier-eslint": "^9.0.0",
     "prettier-eslint-cli": "^5.0.0",
-    "sinon": "^7.3.2",
+    "sinon": "^8.0.0",
     "sinon-chai": "^3.3.0",
     "sqlite3": "^4.0.9"
   },
